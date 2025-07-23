@@ -4,7 +4,7 @@ At the beginning of each section, you may find a table summarizing the samplers 
 
 Sampler            | Time Spent | Order | Converges         | Notes                                 | 
 :----------------- | :--------------- | :---- | :----------- | :--------------------------------------------------- | 
-Name of the sampler | How many times **slower** than `euler`. 1x=the same as `euler`, 2x=takes twice as long as `euler`, etc              | The order, as mentioned in [#accuracy/control = better?](#accuracy-control-better). Some technically support a range of orders, in that case, I'll include the default & range. | **Yes** (refines 1 image with more steps) / **No** (may change composition with more steps) | Some notes about the sampler | 
+Name of the sampler | How many times **slower** than `euler`. 1x=the same as `euler`, 2x=takes twice as long as `euler`, etc              | The order, as mentioned in [#accuracy/control](./01_accuracy.md). Some technically support a range of orders, in that case, I'll include the default & range. | **Yes** (refines 1 image with more steps) / **No** (may change composition with more steps) | Some notes about the sampler | 
 
 ## Explicit Runge-Kutta Methods: Euler, Heun, and Beyond
 | Sampler            | Time Spent  | Order | Converges         | Notes                                  | 

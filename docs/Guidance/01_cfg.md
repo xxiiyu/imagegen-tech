@@ -29,6 +29,7 @@ denoised_image = negative + (positive - negative) * cfg
 ```
 Where you can imagine `positive` and `negative` as the representation of the positive and negative prompts respectively that the model understands.
 Armed with this knowledge, let's reiterate what happens with prompts at various CFG levels:
+
 - `cfg < 1`: Negative prompts would behave like positive prompts.
 - `cfg = 1`: Negative prompts have no effect. 
 - `cfg > 1`: The model will actively avoid generating anything in the negative prompt.

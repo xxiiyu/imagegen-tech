@@ -14,4 +14,4 @@
 - **[`AYS`](https://arxiv.org/pdf/2404.14507) (Align Your Steps):** Predefined lists of noise levels found through numerical optimization to be good for a specific model architecture.
 	- `SD1` / `SDXL` / `SVD`: Match this with the one your model is based on. 
 	- `AYS 11` / `AYS 32`: `AYS` tuned for 10 / 31 steps generation. If you select any step count besides 10 / 31, log-linear interpolation is used to create the undefined noise levels.
-- **[`GITS`](https://arxiv.org/abs/2405.11326) (Geometry-Inspired Time Scheduling):** Paper authors examine different image gen neural nets and found surprisingly similar generation trajectories across them. They exploit the structure of this trajectory, which is GITS.
+- **[`GITS`](https://arxiv.org/abs/2405.11326) (Geometry-Inspired Time Scheduling):** Paper authors examine different imagegen neural nets and found surprisingly similar generation trajectories across them. They exploit the structure of this trajectory, which is GITS.

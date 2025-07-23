@@ -1,0 +1,24 @@
+# (Non-exhaustive) List of Training-Based Sampling Methods
+
+!!!warning "UNDER CONSTRUCTION"  
+	This section is incomplete and subject to massive changes. 
+
+- **[`lcm`](https://arxiv.org/abs/2310.04378):** [Consistency Models](https://arxiv.org/abs/2303.01469) defines a new training objective for the model - to learn the "consistency function (CF)," which is some function `f(x, t) = x_0` that takes the current noisy image and the time step, and outputs the origin - that is, the completely denoised image. LCM applies the idea to latent-based models (like stable diffusion).
+	- Sampling in 1 step in practice doesn't yield great images. To fix this, they enable it to run multiple steps by re-injecting noise. The procedure is: 1st prediction, inject noise back, predict again, ... repeat.
+- **[`turbo`](https://huggingface.co/stabilityai/sdxl-turbo):** Paper authors use both adversarial loss and distillation loss to further train a model to allow it to generate images in a few steps.
+	- Adversarial loss: A neural network (the "discriminator") is used to "detect" if the few-step-generated image is AI-generated; If the discriminator successfully detects it, the image gen model is punished and forced to do better.
+The discriminator is also trained by us and not perfect. Only using adversarial loss eventually leads to the model to exploit the discriminator's defects that, while minimizing adversarial loss, results in horrible images.
+	- Distillation loss: During training, which requires the model being trained (the "student") to predict the noise, a different image gen model (the "teacher") also predicts the noise along with it. The student is rewarded if what it predicts is close to what the teacher predicts.
+This helps ground the student model to generate sane images and not abuse the discriminator's imperfections.
+- **[`lightning`](https://huggingface.co/ByteDance/SDXL-Lightning):** Basically improves upon the methods of `turbo`. `turbo` used a pre-trained encoder as the foundation for the discriminator, which introduced several problems like increased training hardware reqs, stuff like LoRAs being less compatible, etc. `lightning` directly uses the diffusion model's encoder as the discriminator's backbone instead.
+- **[`tcd`](https://github.com/jabir-zheng/TCD):** Authors identify issues on why `lcm` can't make clear images with good detail, which is the accumulated errors due to practical limitations during training and sampling. To fix this they:
+	- Update the training objective: They expand the definition of the original CF and arrive at the "trajectory consistency function (TCF)," `f(x, t, s) = x_s`. Compared to the original CF, TCF additionally takes an input `s`, and outputs the partially denoised image at timestep `s` (if `s = 0` then the output is the completely denoised image again).
+	- Update the sampling method: The new objective being TCD allows them to use stochastic sampling, which helps to correct accumulated errors.
+	- **Several key ideas of TCD are highly similar to that of [CTM](https://arxiv.org/abs/2310.02279) and the two have a dispute.** TCD has been [accused of plagiarism](https://x.com/gimdong58085414/status/1772350285270188069) by CTM's authors, with there being a response on the same post and [TCD's code repo](https://github.com/jabir-zheng/TCD), with CTM's authors being dissatisfied with said response in [this issue](https://github.com/jabir-zheng/TCD/issues/13). I can't find anything that happened afterward.
+- **[`hyper`](https://huggingface.co/ByteDance/Hyper-SD):** Takes ideas from CTM and [DMD](https://arxiv.org/abs/2311.18828), and incorporates human feedback to train a low-step genning model and LoRA.
+- **[`dmd2`](https://github.com/tianweiy/DMD2):** DMD says rather than rewarding the student model for following the teacher model step by step, only reward the final result and ignore how the student does it. This did great but came with problems like high hardware reqs and the student following the teacher step by step anyway, that DMD2 fixes:
+	- Use the Two-Time Scale Rule inspired by [this](https://arxiv.org/abs/1706.08500) paper, reducing hardware reqs as DMD2 no longer requires generating an entire dataset using the teacher to stabilize training.
+	- Additionally use a discriminator as well, which potentially allows the student to surpass the teacher.
+	- 1 step generation still isn't great, so they extend it to support many-step generation like how `lcm` does it (predict, noise inject, repeat).
+- **[`pcm`](https://github.com/G-U-N/Phased-Consistency-Model):** Again inspired by consistency models, rather than predicting the completely denoised image, cut it into multiple intermediate steps and try predicting from one to the next. This also solves the train-test mismatch of what the model was trained for not matching how it's used in practice.
+<!-- - **[`tdd`](https://github.com/RedAIGC/Target-Driven-Distillation):** -->

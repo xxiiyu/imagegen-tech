@@ -1,6 +1,6 @@
 # What is Sampling?
 
-**Sampling** means to generate new data from a distribution that has been learned by a model. For our image generation purposes, this means to generate a new image that is similar to real images that the diffusion model has been trained on.
+**Sampling** means to pick data using a probability distribution that has been learned by a model. For our image generation purposes, this means to generate a new image that is similar to real images that the diffusion model has been trained on.
 
 For diffusion models, sampling is done through the **reverse process** - that is, diffusion models learn the process of removing noise from (**denoising**) an image. Specifically:
 

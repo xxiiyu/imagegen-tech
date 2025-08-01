@@ -26,16 +26,20 @@ Diffusion models are trained to learn "trajectories" that take the input $x_1$ s
 These trajectories can be naturally described by something called a **differential equation,** which is a fancy name for an equation that relates something with how it should change. For example, let's say you're half way through generating a cat image with diffusion, so you have a half-noise-half-cat image $x_{0.5}.$ The differential equation would tell you how you should change $x_{0.5}$ to get closer to a real cat image: these pixels should be a bit brighter, those should be less saturated, ... etc.
 
 !!!note "Analogy"
-    Imagine flying to France, and you just landed at the airport ($x_1$) and you want to get to a restaruant ($x_0$), but you don't have a map. What you 
+    Imagine flying to France, and you just landed at the airport ($x_1$) and you want to get to a restaruant ($x_0$), but you don't have a map. What you can do is ask people on the street (the differential equation) for directions, walk in that direction for a bit, then ask people where to go next.
 
-Differential equations come in 2 kinds: **stochastic (SDE)** or **ordinary (ODE),** which correspond with **diffusion** and **flow matching** respectively. The basic difference is that SDEs include a noise term while ODEs don't. This also leads to the concept of SDEs being **non-convergent,** where one can observe that a stochastic sampler like `euler_ancestral` never really "settle" on an image and increasing step counts can drastically change the final image composition.
+    There is a tradeoff: Asking people more often costs more time, but the directions will be more accurate. Asking people less often and walking a big distance at once will save you a lot of time interacting with people, but you may overshoot, turn the wrong corner, etc. 
+    
+    The same is with solving an ODE / SDE: Higher step size = fewer differential equation evaluations = less time spent and less accurate. Vice versa.
+
+Differential equations come in 2 kinds: **stochastic (SDE)** or **ordinary (ODE)**. The basic difference is that SDEs include a noise term while ODEs don't. This also leads to the concept of SDEs being **non-convergent,** where one can observe that a stochastic sampler like `euler_ancestral` never really "settle" on an image and increasing step counts can drastically change the final image composition.
 
 To generate an image then is to solve one of these SDEs or ODEs. This also means that all samplers can be thought of as SDE or ODE solvers, and SDE or ODE solvers developed before diffusion, like the Runge-Kutta methods, can be used as samplers.
 
 !!!info "On ODE / SDE Sampling of Diffusion / Flow"
-    While diffusion and flow matching were formulated using SDEs and ODEs respectively, it has been shown that one can construct an equivalent ODE / SDE from the other, like in [Song et. al.](https://arxiv.org/abs/2011.13456) for example.
+    While denoising diffusion and flow matching were formulated using SDEs and ODEs respectively, it has been shown that one can construct an equivalent ODE / SDE from the other, like in [Song et. al.](https://arxiv.org/abs/2011.13456) for example.
 
-    This means that when implemented correctly, you can use ODE methods with diffusion and SDE methods with flow. 
+    This means that when implemented correctly, you can use ODE methods with denoising diffusion and SDE methods with flow. 
 
 ## Latents - Why and How
 

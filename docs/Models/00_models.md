@@ -75,3 +75,21 @@ The **loss (function)**, also called the **cost** or **objective**, is a functio
     You may ask, why minimize the difference squared and not just the difference? An intuitive explanation is this: If the difference between the true price and the predicted price is big, then the square will extrapolate it to be bigger. This means we punish the model way harder if it makes a wildly inaccurate prediction.
     
     There are more math-heavy reasons rooted in statistics, the details of which are out of the scope of this article. (For those interested in searchable keywords, minimizing the squared difference - the L2 loss - corresponds to maximizing the likelihood.)
+
+### What is Adversarial Loss?
+
+**Adversarial** loss generally refers to when practitioners pit two neural networks against each other.
+
+For example, in image genereating GANs, two models are simutaneously trained at once - the generator $G$, and the discriminator / adversary $A$:
+
+- $G$ tries its best to create realistic images and fool $A$.
+- $A$ tries its best to distinguish between real and generated images. 
+
+This is a sound approach, and GANs have been SOTA in terms of generative modeling. It comes with its own problem though, most prominently that it's very hard to balance $G$ and $A$. For example:
+
+- $G$ only learn how to exploit $A$'s defects, creating "images" that trick $A$ but are completely unnatural.
+- $G$ only learns a few types of images that $A$ is less certain about, destroying output variety.
+- $A$ is too good at discerning real vs. generated that makes it impossible for $G$ to learn from gradient descent.
+- $G$ and $A$ end up in an infinite XYZ cycle. $G$ learns to generate only X, so $A$ learns to classify that as generated; $G$ then learns to only generate Y, so $A$ classifies all Y as generated, repeat.
+
+Several training rules, different types of losses, regularization techniques... have been proposed *just* to attempt to solve this problem in GANs.

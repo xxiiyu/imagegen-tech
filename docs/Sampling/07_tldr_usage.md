@@ -14,12 +14,13 @@ For example, this means that in the same time that you run `euler` for 20 steps,
 - `ddpm` 
 - `restart` 
 - `seeds` 
+- `sa_solver(_pece)`
 - Any sampler with `ancestral (a)` in the name
 - Any sampler with `sde` in the name
 
 Generally, these samplers beat their non-composition-changing counterparts if you use higher step counts.
 
-## What Works at Various Step Counts
+## SDXL - What Works at Various Step Counts
 
 | Steps  | Works Well | Usually Breaks 
 | - | - | -
@@ -29,5 +30,5 @@ Generally, these samplers beat their non-composition-changing counterparts if yo
 | 30+      | High-order methods like `ipndm(_v)` / Stochastic methods like `dpmpp_3m_sde` | -
 
 !!!note "But `X` Worked/Broke For Me!"  
-    These were tested on Amanatsu, a SDXL eps-pred model on a few samples. You should see these only as general rules of thumb on what works in low / high step environments.  
+    These were tested on Amanatsu, a very stable eps-pred SDXL, on a few samples. You should see these only as general rules of thumb on what works in low / high step environments.  
     For example, most SDXL v-pred models require a ton more steps with any sampler, 20+ for only decent results in my experience.

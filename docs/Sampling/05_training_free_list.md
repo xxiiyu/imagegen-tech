@@ -18,12 +18,12 @@ Name of the sampler | How many times **slower** than `euler`. 1x=the same as `eu
 
 `euler`, `heun`, and the rarer [`fehlberg2`](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta%E2%80%93Fehlberg_method), [`bosh3`](https://en.wikipedia.org/wiki/Bogacki%E2%80%93Shampine_method), [`rk4`](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods#The_Runge%E2%80%93Kutta_method), [`dorpi6`](https://en.wikipedia.org/wiki/Dormand%E2%80%93Prince_method), and more, all fall under the umbrella of explicit [Runge-Kutta(RK) Methods](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods) for solving ODEs. They were developed way before any diffusion model, or even any modern computer, came to be.
 
-RK methods are **singlestep**, which means that they take quite long to run. `bosh3` for example takes 3 times longer than `euler` per step. Combined with the fact that diffusion DEs are stiff, this means that it's seldom worth using a high-order explicit RK method by itself, as it massively increases sampling time while netting you a very marginal gain in quality.
+RK methods are **singlestep**, which means that the higher order ones take a while to run. `bosh3` for example takes 3 times longer than `euler` per step. Combined with the fact that diffusion DEs are stiff, this means that it's seldom worth using a high-order explicit RK method by itself, as it massively increases sampling time while netting you a very marginal gain in quality.
 Personally, I'd at most use `bosh3`, though even that's cutting it close. It's no wonder that you don't find some of these in popular UIs.
 
 Samplers developed down the road employ optimizations specific to diffusion equations, making them the better choice 90% of the time. 
 
-!!!info "Where Can I Find These Other Samplers?"  
+!!!info "Where Can I Find Higher Order RK Samplers?"  
     - **ComfyUI:** [ComfyUI-RK-Sampler](https://github.com/memmaptensor/ComfyUI-RK-Sampler) or [RES4LYF](https://github.com/ClownsharkBatwing/RES4LYF)
     - **reForge:** Settings->Sampler according to [this](https://github.com/Panchovix/stable-diffusion-webui-reForge/commit/8f4d8422835aa7c2504cd3961aa86b4f65752f8b)
 
@@ -42,20 +42,11 @@ Through adjustments to the diffusion equation, people arrived at [DDIM](https://
 
 These 3, along with the classical ODE solvers `euler`, `heun`, and `LMS`, were the original samplers shipped with the release of the original stable diffusion.
 
-!!!info "How are "Pseudo" Numerical Methods Different?"   
-    Recall the 2nd and 3rd steps of DE solving in [#What is a sampler](./00_sampling.md#what-is-a-sampler):  
-    2. Find the direction to walk  
-    3. Walk in that direction for a bit
-
-    Essentially, classical methods walk in a straight line in step 3, however the training data for diffusion models - the safe roads to walk on, if you will - form a curvy path. This means that classical methods may accidentally step outside the safe roads into the danger zones (range of data unseen in training), leading to a bad sample.
-    
-    So... why not walk in non-straight lines? That's exactly what the authors of PNDM do, and they call these pseudo numerical methods.
-
 ## Steady Improvements: DEIS + iPNDM, DPM
 | Sampler            | Time Spent | Order | Converges         | Notes                                | 
 | :----------------- | :--------------- | :---- | :----------- | :--------------------------------------------------- |
 | `deis`               | 1x               | default 3 (up to 4)    | Yes  |     | 
-| `ipndm   `          | 1x               | 4                             | Yes | `ipndm` found empirically better than `ipndm_v`    |
+| `ipndm`          | 1x               | 4                             | Yes | `ipndm` found empirically better than `ipndm_v`    |
 | `ipndm_v`             | 1x               | 4                             | Yes |        | 
 | `dpm_2`              | 2x               | 2                            | Yes |        | 
 | `dpm_2_ancestral`  | 2x               | 2                              | No |       | 

@@ -80,11 +80,13 @@ The DEIS paper also introduced "improved PNDM" (iPNDM). `ipndm_v` is the variabl
 \**(this nothing to do with StableCascade I just thought it's a cool title)*
 
 Around this time, the idea of guidance took off, offering the ability to specify what image we want to generate, but also bringing new challenges to the table:
+
 - High guidance makes the DE even stiffer, breaking high-order samplers
 - High guidance knocks samples out of the training data range (train-test mismatch), creating unnatural images
 
 To address issues with high CFG, [DPM++](https://arxiv.org/abs/2211.01095) adds 2 techniques (that were proposed in prior works by others already) to DPM:
-- Switch from noise prediction (ε-pred = eps-pred) to data prediction (x₀-pred) (which they show is better by a constant in Appendix B).
+
+- Switch from noise (eps, $\epsilon$) prediction to data ($x_0$) prediction (which they show is better by a constant in Appendix B).
 - The above also allows them to apply thresholding to push the sample back into training data range.
 
 !!!info "Practical; Not a Technical Marvel"  

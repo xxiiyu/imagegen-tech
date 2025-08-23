@@ -2,13 +2,12 @@
 !!!note "CFG in Flux"
 	**Flux was not trained with CFG, thus nothing in this section applies.** The "Guidance" value you can provide to flux is not CFG.
 
-[Classifier-free guidance](https://arxiv.org/abs/2207.12598)
-
-We can see how CFG works exactly by digging through [code](https://github.com/comfyanonymous/ComfyUI/blob/master/comfy/samplers.py#L346):
+It's simplest to understand how CFG works exactly by digging through [code](https://github.com/comfyanonymous/ComfyUI/blob/master/comfy/samplers.py):
 ```
 cfg_result = uncond_pred + (cond_pred - uncond_pred) * cond_scale
 ```
 Where `uncond_pred` is the model prediction without conditioning, and `cond_pred` is the model prediction with conditioning. `cond_scale` is CFG, and `cfg_result` is the result image we get. For brevity, I'll be referring to `uncond_pred` and `cond_pred` as `uncond` and `cond` respectively. You can imagine that:
+
 - `uncond` is what the model thinks it should do.
 - `cond` is what the model thinks it should do, *given* our guidance.
 

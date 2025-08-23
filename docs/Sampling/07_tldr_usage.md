@@ -5,10 +5,12 @@
 | Relative Speed | Samplers 
 | - | - 
 | 1x | `euler`, `dpmpp_2m` (and everything with `<number>m` in the name), most others
-| 2x | `heun`, `dpm_2`, `dpmpp_sde`, `seeds_2`, `dpmpp_2s_ancestral` (and everything with `2s` in the name)
+| 2x | `heun`, `dpm_2`, `dpmpp_sde`, `seeds_2`, `dpmpp_2s_ancestral`, `sa_solver_pece` (and everything with `2s` in the name)
 | 3x | `heunpp`, `seeds_3`, `dpm_adaptive`, anything with `3s` in the name
 
 For example, this means that in the same time that you run `euler` for 20 steps, it takes about the same time to run `dpm_2` for 10 steps.
+
+`dpm_fast` is a bit special; This sampler switches between the `DPM-3`, `DPM-2`, and `DPM-1` algorithm in a way that the total amount of time spent is the same as `euler` if you set the same amount of steps. Each step may take differing amounts of time.
 
 ## Samplers That Change Composition As You Increase Step Count
 - `ddpm` 

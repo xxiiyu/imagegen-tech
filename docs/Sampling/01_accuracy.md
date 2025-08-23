@@ -2,7 +2,7 @@
 
 You've probably seen something like this in other diffusion guides:
 
-> `DPM++` is better \[than `Euler`\] for "accuracy" / "precision" "control".
+> `DPM++` is better \[than `Euler`\] for "accuracy" / "precision" / "control".
 
 Viewing sampling through the lens of solving the diffusion **differential equation (DE)**, it becomes clearer what this could mean - to solve the DE more accurately. In math terms, we'd say that the more accurate solver is higher **order.**
 
@@ -47,6 +47,7 @@ Now, let's take `euler`, `heun`, and `bosh3`, which have an order of 1, 2, 3 res
 In general, if the order of a sampler is `O`, and the error it makes when you take 1 step is `E`, then the error if you take `N` steps would be around `E / (N^O)`.
 
 Let's compare `euler` and `heun`. `heun` takes twice as long as `euler` per step, and has an order of 2. Now, let's run them for the same amount of time and see what happens to the error:
+
 - `euler` for 10 steps, the error is about `10 / 10` = 1
 - `heun` for 5 steps (because it takes 2x as long), the error is about `10 / (5*5)` = 0.4
 

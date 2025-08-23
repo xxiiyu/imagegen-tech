@@ -40,7 +40,7 @@ Real world images are obviously more complex, having way bigger widths and heigh
 
 Great! So, just train a neural network to learn $p_\text{data},$ right? Well... it's not so easy. To see why, let's try designing a neural network that represents a probability distribution. 
 
-Let's call our neural network $\text{NN}(\text{Input}),$ and let's call the distribution that $\text{Input}$ comes $p_\text{init}.$ $p_\text{init}$ can pretty much be anything; You could for example train a neural network to turn cat images into dog images if you really wanted to.
+Let's call our neural network $\text{NN}(\text{Input}),$ and let's call the distribution that $\text{Input}$ comes from $p_\text{init}.$ $p_\text{init}$ can pretty much be anything; You could for example train a neural network to turn cat images into dog images if you really wanted to.
 
 In practice, $p_\text{init}$ is usually the **gaussian** distribution, aka the noise distribution. The benefit is that the gaussian is very simple, and we know how generate infinite samples from it. So if our neural network learns to turn $p_\text{init}\to p_\text{data},$ *and* we know how to generate infinite samples of $p_\text{init},$ we can now generate infinite samples of $p_\text{data}.$ Neat!
 
@@ -74,7 +74,7 @@ The **loss (function)**, also called the **cost** or **objective**, is a functio
 !!!info "Why Minimize the Square?"
     You may ask, why minimize the difference squared and not just the difference? An intuitive explanation is this: If the difference between the true price and the predicted price is big, then the square will extrapolate it to be bigger. This means we punish the model way harder if it makes a wildly inaccurate prediction.
     
-    There are more math-heavy reasons rooted in statistics, the details of which are out of the scope of this article. (For those interested in searchable keywords, minimizing the squared difference - the L2 loss - corresponds to maximizing the likelihood.)
+    There are more math-heavy reasons rooted in statistics, the details of which are out of the scope of this article. (For those interested in searchable keywords, minimizing the squared difference - the L2 loss - corresponds to maximizing the likelihood, under the assumption that the random errors are normally distributed.)
 
 ### What is Adversarial Loss?
 
@@ -84,10 +84,9 @@ For example, in image genereating GANs, two models are simutaneously trained at 
 
 - $G$ tries its best to create realistic images and fool $A$.
 - $A$ tries its best to distinguish between real and generated images. 
-
 This is a sound approach, and GANs have been SOTA in terms of generative modeling. It comes with its own problem though, most prominently that it's very hard to balance $G$ and $A$. For example:
 
-- $G$ only learn how to exploit $A$'s defects, creating "images" that trick $A$ but are completely unnatural.
+- $G$ only learns how to exploit $A$'s defects, creating "images" that trick $A$ but are completely unnatural.
 - $G$ only learns a few types of images that $A$ is less certain about, destroying output variety.
 - $A$ is too good at discerning real vs. generated that makes it impossible for $G$ to learn from gradient descent.
 - $G$ and $A$ end up in an infinite XYZ cycle. $G$ learns to generate only X, so $A$ learns to classify that as generated; $G$ then learns to only generate Y, so $A$ classifies all Y as generated, repeat.

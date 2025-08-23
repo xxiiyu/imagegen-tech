@@ -16,7 +16,7 @@ The theoretical quality of images generated based on non-stochastic vs. stochast
 
     Many new stochastic methods also try to incorporate the best of both worlds, working nicely even in low steps. This includes `Restart`, `er_sde`, `sa_solver`, and `seeds`.
 
-### VP / VE: Why Stochasticity Break Flux and More
+### Why Stochasticity Break Flux and More
 
 SD 3.X, Flux, AuraFlow, Lumina 2, and potentially more to come, all use an architecture based on [Rectified Flow (RF)](https://arxiv.org/pdf/2209.03003), which is very sensitive to the variance (a statistical measure) of the data. 
 
@@ -35,9 +35,9 @@ Example | `dpmpp_2s_ancestral` (2 model calls per step = 2x slower than `euler`)
 ## Implicit / Explicit
 2 approaches used to solve DEs. 
 
-Effectively, implicit methods take longer but are more resistant to stiffness. This means in theory, you can use higher order implicit methods without them breaking, leading to *moar* accuracy. (This is *super* slow, though.)
+Implicit methods solve a harder form of the DE, making them slower but more resistant to stiffness. This means in theory, you can use higher order implicit methods without them breaking, leading to *moar* accuracy. (This is *super* slow, though.)
 
-ALL common samplers are explicit. This includes `euler`, `deis`, `ipndm(_v)`, `dpm(pp)` family, `uni_pc`, `RES`, and more.
+ALL common samplers are explicit. This includes `euler`, `deis`, `ipndm(_v)`, `dpm(pp)` family, `uni_pc`, `res_multistep`, and more.
 
 The quality-speed tradeoff of implicit methods seems to limit their popularity. They're also not found as defaults in popular UIs.
 

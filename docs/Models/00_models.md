@@ -42,9 +42,10 @@ Great! So, just train a neural network to learn $p_\text{data},$ right? Well... 
 
 Let's call our neural network $\text{NN}(\text{Input}),$ and let's call the distribution that $\text{Input}$ comes from $p_\text{init}.$ $p_\text{init}$ can pretty much be anything; You could for example train a neural network to turn cat images into dog images if you really wanted to.
 
-In practice, $p_\text{init}$ is usually the **gaussian** distribution, aka the noise distribution. The benefit is that the gaussian is very simple, and we know how generate infinite samples from it. So if our neural network learns to turn $p_\text{init}\to p_\text{data},$ *and* we know how to generate infinite samples of $p_\text{init},$ we can now generate infinite samples of $p_\text{data}.$ Neat!
+In practice, $p_\text{init}$ is usually the **gaussian** distribution, aka the **noise** distribution. The benefit is that the gaussian is very simple, and we know how generate infinite samples from it. So if our neural network learns to turn $p_\text{init}\to p_\text{data},$ *and* we know how to generate infinite samples of $p_\text{init},$ we can now generate infinite samples of $p_\text{data}.$ Neat!
 
-(There are other types of noise, but let's just ignore that.)
+!!!note "Assumptions"
+    Since it's almost always the case that $p_\text{init}$ is the gaussian, I'll be making this assumption in this guide from here on.
 
 Since our outputs should be probabilities, these outputs should all be positive, as negative probability doesn't really make sense, right? A conventional way to do this is to transform the output using the exponential function, i.e. turn it into $e^{-\text{NN}(\text{Input})}.$ The details are mathy, but the important part is that $e^{-\text{NN}(\text{Input})}$ is always positive.
 
@@ -66,7 +67,7 @@ The problem lies in $Z,$ which is next to impossible to calculate for a general 
 
 At a high level, we always say we "train a model to learn something." Well... how do we quantify how much the model has "learned"?
 
-The **loss (function)**, also called the **cost** or **objective**, is a function people design to measure how well the model performs on a task. Conventionally, a lower loss means the model is performing better. Training a model could also be referred to as minimizing the loss.
+The **loss (function) $L$**, also called the **cost** or **objective**, is a function people design to measure how well the model performs on a task. Conventionally, a lower loss means the model is performing better. Training a model could also be referred to as minimizing the loss.
 
 !!!note "Illustrative Example"
     Let's say you're trying to predict house prices. A simple and common loss function for this task could be $L=|\text{TruePrice} - \text{PredictedPrice}|^2$, the square of the difference between the true price and the predicted price. As you can imagine, trying to minimize the loss $L$ is the same as trying to reduce the difference between the true price and the prediction, or in other words make the prediction more accurate. 

@@ -44,6 +44,11 @@ The quality-speed tradeoff of implicit methods seems to limit their popularity. 
 !!!info "Where Can I Find Implicit Samplers?"  
     ComfyUI: [RES4LYF](https://github.com/ClownsharkBatwing/RES4LYF)
 
+### Diagonally Implicit
+These are a subset of implicit methods whose difficulty to solve sits between implicit and explicit methods. They're easier to solve, but can't get as accurate.
+
+[Here](https://ntrs.nasa.gov/api/citations/20160005923/downloads/20160005923.pdf)'s a comprehensive review of Diagonally Implicit Runge Kutta (DIRK) methods for the interested.
+
 ## Training-Free / Training-Based
 
 Training-free methods are those that you can use without further changing the model. You can simply load the model in and use a training-free sampling method on it and it'll (probably) work. These include familiar faces like `euler`, `dpmpp_2m`, etc.

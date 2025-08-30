@@ -1,0 +1,1161 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../00_models/">
+      
+      
+        <link rel="next" href="../02_training_objectives/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>A Premier on Diffusion - 11yu on Tech For AI Image Generation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#a-premier-on-diffusion" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="11yu on Tech For AI Image Generation" class="md-header__button md-logo" aria-label="11yu on Tech For AI Image Generation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            11yu on Tech For AI Image Generation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              A Premier on Diffusion
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="11yu on Tech For AI Image Generation" class="md-nav__button md-logo" aria-label="11yu on Tech For AI Image Generation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    11yu on Tech For AI Image Generation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Guidance
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Guidance
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Guidance/00_guidance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    What is Guidance?
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Guidance/01_cfg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CFG
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Models
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Models
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    What is a Model?
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    A Premier on Diffusion
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    A Premier on Diffusion
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#motivation-for-diffusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Motivation for Diffusion
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-2-diffuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      How 2 Diffuse
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#latents-why-and-how" class="md-nav__link">
+    <span class="md-ellipsis">
+      Latents - Why and How
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Latents - Why and How">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#practical-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Practical Details
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_training_objectives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Training Diffusion Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_vae/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    VAE (Variational AutoEncoder)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../99_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Additional Notes
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Sampling
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Sampling
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Sampling/00_sampling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    What is Sampling?
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Sampling/01_accuracy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    "Accuracy / Control"
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Sampling/03_sample_speed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Generation Speed and How to Go Faster
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Sampling/04_types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Types of Sampling Methods
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Sampling/05_training_free_list/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    (Non-exhaustive) List of Training-Free Samplers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Sampling/06_training_based_list/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    (Non-exhaustive) List of Training-Based Sampling Methods
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Sampling/07_tldr_usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Practical TL;DR of Samplers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Schedule
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Schedule
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Schedule/00_schedule/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    What is a Noise Schedule?
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Schedule/01_schedule_list/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    (Non-exhaustive) List of Schedulers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Appendix
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Appendix
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Appendix/other_guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Other Guides
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Appendix/references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    References
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Appendix/special_thanks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Special Thanks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#motivation-for-diffusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Motivation for Diffusion
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-2-diffuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      How 2 Diffuse
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#latents-why-and-how" class="md-nav__link">
+    <span class="md-ellipsis">
+      Latents - Why and How
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Latents - Why and How">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#practical-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Practical Details
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="a-premier-on-diffusion">A Premier on Diffusion</h1>
+<div class="admonition note">
+<p class="admonition-title">Sources</p>
+<p>This entire guide mostly references <a href="https://diffusion.csail.mit.edu/docs/lecture-notes.pdf">MIT</a>'s lecture notes, and thus might differ from how other literature formuate things.</p>
+<p>For example, since flow could be thought of as a special case for diffusion, I'll be referring to both as "diffusion" here.</p>
+</div>
+<p>As mentioned in <a href="../00_models/#what-does-generating-mean">#what is a model</a>, generative models can be formalized as models that allow us to sample from the data's underlying probability distribution <span class="arithmatex">\(p_\text{data}.\)</span> Diffusion is the latest development.</p>
+<h2 id="motivation-for-diffusion">Motivation for Diffusion</h2>
+<p>Recall from <a href="../00_models/#why-modeling--is-a-problem">#the issue in modeling <span class="arithmatex">\(p_\text{data}\)</span></a> that we trained a neural network <span class="arithmatex">\(\text{NN}(\text{Input}),\)</span> and use <span class="arithmatex">\(\frac{e^{-\text{NN}(\text{Input})}}Z\)</span> as our output to (1) force our outputs be positive since probabilities should be positive, and (2) force that the sum of all possible outputs be 1 since it's guaranteed for there being <em>an</em> outcome to any event.</p>
+<p>The issue lies in <span class="arithmatex">\(Z\)</span> being hard to calculate. Remedies have been designed, yet all come with undesirable downsides. Diffusion solves these issues, specifically:</p>
+<ol>
+<li>Diffusion doesn't have to calculate nor approximate <span class="arithmatex">\(Z.\)</span></li>
+<li>Diffusion imposes no restrictions on neural network architecture, nor does it use the unstable adversarial loss.</li>
+<li>Diffusion still models <span class="arithmatex">\(p_\text{data},\)</span> ensuring samples are actually similar to the training examples. </li>
+</ol>
+<p>These strong foundations lead to them becoming SOTA in fields like image and video generation, and enabling tasks like inpainting to be done.</p>
+<h2 id="how-2-diffuse">How 2 Diffuse</h2>
+<p>Diffusion is the process of adding noise to an image, gradually destroying information until it becomes pure noise. To be more concrete, I'll define the <strong>timestep <span class="arithmatex">\(t\)</span></strong>:</p>
+<ul>
+<li><span class="arithmatex">\(t=0\)</span> is the beginning of the diffusion process, where no noise has been added and the image <span class="arithmatex">\(x_0\)</span> is perfectly clean.</li>
+<li><span class="arithmatex">\(t=1\)</span> is the end of the diffusion process, where the image <span class="arithmatex">\(x_1\)</span> is just pure noise (all of the information from <span class="arithmatex">\(x_0\)</span> has been destroyed).</li>
+<li>Any other <span class="arithmatex">\(t\)</span> is during the process, where <span class="arithmatex">\(x_t\)</span> is some combination of data and noise.</li>
+</ul>
+<p>A diffusion model learns to reverse the diffusion process.  Specifically, diffusion models are trained to learn "paths," which begin at a pure noise input <span class="arithmatex">\(x_1\)</span> and end at a data point <span class="arithmatex">\(x_0\)</span>  that could realistically come from <span class="arithmatex">\(p_\text{data}\)</span> (for example, a cat image taken from the distribution of cat images). Following these paths is the same as gradually transforming noise into clean images.</p>
+<p>These paths can be naturally described by something called a <strong>differential equation,</strong> which is a fancy name for an equation that relates something with how it should change. For example, let's say you're half way through generating a cat image with diffusion, so you have a half-noise-half-cat image <span class="arithmatex">\(x_{0.5}.\)</span> The differential equation would tell you how you should change <span class="arithmatex">\(x_{0.5}\)</span> to get closer to a real cat image: these pixels should be a bit brighter, those should be less saturated, ... etc.</p>
+<div class="admonition note">
+<p class="admonition-title">Analogy</p>
+<p>Imagine flying to France, and you just landed at the airport (<span class="arithmatex">\(x_1\)</span>) and you want to get to a restaruant (<span class="arithmatex">\(x_0\)</span>), but you don't have a map. What you can do is ask people on the street (the differential equation) for directions, walk in that direction for a bit, then ask people where to go next.</p>
+<p>There is a tradeoff: Asking people more often costs more time, but the directions will be more accurate. Asking people less often and walking a big distance at once will save you a lot of time interacting with people, but you may overshoot, turn the wrong corner, etc. </p>
+<p>The same is with solving an ODE / SDE: Higher step size = fewer differential equation evaluations = less time spent and less accurate. Vice versa.</p>
+</div>
+<p>Differential equations come in 2 kinds: <strong>stochastic (SDE)</strong> or <strong>ordinary (ODE)</strong>. The basic difference is that SDEs include a noise term while ODEs don't. This also leads to the concept of SDEs being <strong>non-convergent,</strong> where one can observe that a stochastic sampler like <code>euler_ancestral</code> never really "settle" on an image and increasing step counts can drastically change the final image composition.</p>
+<p>To generate an image then is to solve one of these SDEs or ODEs. This also means that all samplers can be thought of as SDE or ODE solvers, and SDE or ODE solvers developed before diffusion, like the Runge-Kutta methods, can be used as samplers.</p>
+<div class="admonition info">
+<p class="admonition-title">On ODE / SDE Sampling of Diffusion / Flow</p>
+<p>While denoising diffusion and flow matching were formulated using SDEs and ODEs respectively, it has been shown that one can construct an equivalent ODE / SDE from the other, like in <a href="https://arxiv.org/abs/2011.13456">Song et. al.</a> for example.</p>
+<p>This means that when implemented correctly, you can use ODE methods with denoising diffusion and SDE methods with flow. </p>
+</div>
+<h2 id="latents-why-and-how">Latents - Why and How</h2>
+<p>Directly working with images is costly - each image has thousands of pixels, each with their rgb values.</p>
+<p><strong>Latents</strong> are compressed representation of images that still retain most of the information, like colors, composition, etc. Intuitively, think of converting images to their latents as jpg compression - you lose a little detail in exchange for massively reduced file size.</p>
+<p>Thus, <strong>latent diffusion</strong> was born - it's basically just diffusion + using latents. This significantly reduces the hardware reqs for both training and inferencing, which is why they dominate the market. <code>SD</code>, <code>Flux</code>, you name it, it probably uses latents.</p>
+<p>How do we compress and decompress an image from / to its latent? Well, we don't know... but we can train a neural network to do it for us! For this, <strong>Variational AutoEncoders (VAEs)</strong> are the dominant players. </p>
+<div class="admonition info">
+<p class="admonition-title">VAE En/Decode is Lossy</p>
+<p>Like jpg compression, turning images into latents and back is "lossy" - that is, you lose a bit of information in the process. </p>
+<p>This often comes up when doing many inpainting iterations: <strong>you do not want to en/decode the same image many times, lest the image quality slowly but surely degrades.</strong></p>
+</div>
+<h3 id="practical-details">Practical Details</h3>
+<p>Modern VAEs usually compress 8x8 = 64 normal pixels into 1 latent pixel. This is also why you can only specify image widths and heights in multiples of 8 - the VAE decode can <em>only</em> produce images whose sizes are multiples of 8.</p>
+<p>Each normal pixel usually has 3 channels: red, green, and blue. Each latent pixel has differing amounts of channels depending on model. Having more channels per latent pixel means more information could be retained, but the hardware reqs are increased.</p>
+<p>Originally, most decided to go with a 4-channel VAE, including <code>SD 1.X</code> and <code>SDXL</code>. In recent times, there has been a move towards higher channel VAEs. <code>Flux</code>, <code>SD 3.X</code>, <code>Lumina 2.0</code>, all use 16 channel VAEs. Even more recently, some have ditched latent space and gone back to directly generating in pixels, such as <code>PixelFlow</code>.</p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://arxiv.org/abs/2507.01516">Loss Functions in Diffusion Models: A Comparative Study</a></li>
+<li><a href="https://arxiv.org/abs/2206.00364">(Karras) Elucidating the Design Space of Diffusion-Based Generative Models</a></li>
+<li><a href="https://arxiv.org/abs/2011.13456">(Song) Score-Based Generative Modeling through Stochastic Differential Equations</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+        <script src="../../javascripts/katex.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/katex.min.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>

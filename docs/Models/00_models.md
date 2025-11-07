@@ -85,6 +85,7 @@ For example, in image genereating GANs, two models are simutaneously trained at 
 
 - $G$ tries its best to create realistic images and fool $A$.
 - $A$ tries its best to distinguish between real and generated images. 
+
 This is a sound approach, and GANs have been SOTA in terms of generative modeling. It comes with its own problem though, most prominently that it's very hard to balance $G$ and $A$. For example:
 
 - $G$ only learns how to exploit $A$'s defects, creating "images" that trick $A$ but are completely unnatural.

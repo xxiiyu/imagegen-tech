@@ -14,7 +14,7 @@ A diffusion model usually is designed to have two inputs, a noisy image $x$ and 
 | Type   | ODE           | SDE            |
 | Loss   | $\|u_\text{predicted}(x,t)-u_\text{true}(x,t)\|^2$ | $\|s_\text{predicted}(x,t)-s_\text{true}(x,t)\|^2$ |
 | Predicted Quantity | Think of $u$ as the "velocity." Given your position ($x$) and how far along the path you are ($t$), $u$ is how fast and in which direction to walk to eventually get to the path's end. | $s$ is the **score,** defined as the gradient of the log of the probability distribution $s(x,t)=\nabla_x\log p_t(x,t).$ Note that technically SDE needs both $u$ and $s$ to work. 
-| Under Practical Conditions...\* | $u_\text{true}(x,t)$ is simply defined as $x_0-x_1,$ which is very stable to train on. (Also relating to something called the Optimal Transport in literature) | You don't actually need to train two models. One option is to make the neural network output two things ($u$ and $s$) at the same time. Also see below. |
+| Under Practical Conditions...\* | $u_\text{true}(x,t)=x_0-x_1,$ which is very simple and stable to train on. (Also relating to something called the Optimal Transport in literature) | You don't actually need to train two models. One option is to make the neural network output two things ($u$ and $s$) at the same time. Also see below. |
 | Models | Most modern models use this, like `SD 3.X`, `Flux`, `Lumina`, `Qwen-Image`, `Wan`, etc. | The original SD releases are noise predictors, like `SD 1.X`, `SDXL`, etc.
 
 \*Stil under the same practical conditions: 
@@ -31,21 +31,21 @@ Since the "practical conditions" are almost always met in practice, and basicall
     
     The models have Gaussian probability paths, which mathematically have the form of $\mathcal N(\alpha_t z; \beta_t^2I_d),$ where $\alpha, \beta$ are noise schedulers (monotonic, continuously differentiable, and $\alpha_1=\beta_0=0$ and $\alpha_0=\beta_1=1$).
 
-## Hurdles in Training with Score Matching
+## Hurdles in Score Matching
 
 ### Score Matching to Noise Prediction
 
 When an image is close to being clean, score matching loss becomes numerically unstable and training breaks. Remember that I'm assuming practical conditions, then the score matching loss becomes the following (simplified):
 
 $$
-L=\underset{\substack{\downarrow \\ \text{Near 0 when} \\ \text{image is} \\ \text{almost clean}}}{\color{red}\frac1{\beta_t^2}}|\beta_ts_\text{predicted}(x,t)+\epsilon|\Rightarrow\text{divide by 0 error}
+L=\underset{\substack{\downarrow \\ \text{Near 0 when} \\ \text{image is} \\ \text{almost clean}}}{\color{red}\frac1{\beta_t^2}}|\beta_ts_\text{predicted}(x,t)+\epsilon|^2\Rightarrow\text{divide by 0 error}
 $$
 
 Thus, a "score matching" model is very often reparameterized (basically, changed) and trained on a different but still mathematically equivalent objective. 
 
 DDPM drops the red part of the original loss, and reparameterizes the score matching model into a noise prediction model (**$\epsilon$-pred, eps-pred**). eps-pred saw widespread adoption afterwards.
 
-$$L=|\epsilon_\text{predicted}(x,t)-\epsilon|$$
+$$L=|\epsilon_\text{predicted}(x,t)-\epsilon|^2$$
 
 ### Noise Prediction to (Tangential) Velocity Prediction
 
@@ -53,12 +53,12 @@ eps-pred becomes a problem again in few-steps sampling. At the extreme of 1 step
 
 That's the problem the authors of [this](https://arxiv.org/pdf/2202.00512) work faced. They propose a few reparameterizations that fix this, the most influential of which being **(tangential) velocity prediction (v-pred):**  
 
-$$L=|v_\text{predicted}(x,t)-v|,\quad v=\alpha_t\epsilon - \beta_t x_0$$
+$$L=|v_\text{predicted}(x,t)-v|^2,\quad v=\alpha_t\epsilon - \beta_t x_0$$
 
 !!!note "Tangential Velocity $v$ and Velocity $u$"
     You might remember that there was also a "velocity" $u,$ that being what the flow matching models predict. On the other hand, v-pred is also often also called velocity prediction. How do they relate to each other?
 
-    Confusingly, they really don't. v-pred comes from an angular parameterization, where you can find a visual in the same paper [here](https://arxiv.org/pdf/2202.00512#page=15). 
+    Confusingly, they really don't. v-pred comes from an angular parameterization, where you can find a visual in the same paper on [page 15](https://arxiv.org/pdf/2202.00512#page=15). 
 
 Essentially, this loss is saying that at high noise levels, the v-pred model should focus on trying to make an image, and at low noise levels it should instead focus on removing the remaining noise.
 

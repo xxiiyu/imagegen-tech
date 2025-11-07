@@ -55,7 +55,7 @@ Same as `ModelSamplingSD3`.
 
 For inpainting.
 
-An inpaint mask, which has values ranging from 0 to 1, by default results in a binary decision of "this pixel should(n't) be inpainted." 
+An inpaint mask, which may contain values ranging from 0 to 1, by default results in a binary decision of "this pixel should(n't) be inpainted." 
 
 `DifferentialDiffusion` enables models to utilize the full range of mask values, using them as "how much change should be applied to this pixel."
 

@@ -2,6 +2,11 @@
 
 Before looking at individual nodes, it's helpful to know how the data they work with looks like, and how they behave.
 
+Also refer to Comfy docs:
+
+- [Datatypes](https://docs.comfy.org/custom-nodes/backend/datatypes)
+- [Images, Latents, and Masks](https://docs.comfy.org/custom-nodes/backend/images_and_masks)
+
 ## Basic Types
 
 |  | `int` | `float` / `double` | `string` | `bool` | 
@@ -72,7 +77,9 @@ for this example, the 2nd dimension pair (4, 2) aren't equal, nor is one of them
 - `W (width)`
 
 
-`image` and `latent`s are in the "channel first" format - `NCHW`, meaning the first dimension is `N`, the second is `C`, the third is `H`, and the last is `W`.
+`latent`s are in the "channel first" format - `NCHW`, meaning the first dimension is `N`, the second is `C`, the third is `H`, and the last is `W`.
+
+`image`s are in "channel last" - `NHWC`.
 
 `mask` doesn't have the channel dimension - `NHW`.
 

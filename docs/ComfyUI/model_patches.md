@@ -138,19 +138,19 @@ Overshooting leads to low-quality images, with common issues including extreme s
 | Purpose | Mitigate overshooting. |
 | Notes | **Does nothing if cfg is 1.** |
 
-This takes the original cfg denoised result $x_\text{cfg},$ and scale it down into $x_\text{scaled},$ to prevent overshoot. The two are then average together and that becomes the final model output. 
+This takes the original cfg denoised result $x_\text{cfg},$ and scale it down into $x_\text{scaled}$ to prevent overshoot. The two are then averaged together and that becomes the final model output. 
 
-The authors chose to not directly use $x_\text{scaled}$ as the final output, because "the generated images are overly plain." 
+The authors chose to not directly use $x_\text{scaled}$ as the final model output, because "the generated images are overly plain." 
 
 - **`multiplier`:** cfg rescale multiplier $\phi.$ Higher = use more of the rescaled result to make the mix.
-    - For example, `0.7` means that the final output is $0.7\times x_\text{scaled} + (1-0.7)\times x_\text{cfg}.$
+    - For example, `0.7` means that the final output is 70% $x_\text{scaled}$ and 30% $x_\text{cfg}.$
 
 Compared to simply lowering cfg, this ideally preserves the strong guiding effect of high cfg, but tones it down dynamically during sampling if it's about to overshoot.
 
 !!!note "Deatils"
     Changes the cfg function to the following:
     $$
-    x_\text{final}=\phi\times\underbrace{\frac{\text{std}(x_p)}{\text{std}(x_\text{cfg})}\times x_\text{cfg}}_{x_\text{scaled}}+(1-\phi)\times x_\text{cfg}
+    x_\text{final}=\phi\times\frac{\text{std}(x_p)}{\text{std}(x_\text{cfg})}\times x_\text{cfg}+(1-\phi)\times x_\text{cfg}
     $$
     Where $x_\text{final}$ is the final output and $\text{std}$ is the standard deviation.
 

@@ -1,7 +1,7 @@
 # Training Diffusion Models
 
 !!!note "Recap: [#How Diffusion Generates Images](./01_diffusion.md#how-2-diffuse)"
-    A diffusion model learns "paths" that begin at some initial point $x_1$ which is pure noise, and ends at a data point $x_0$ from $p_\text{data}$ (for example a cat image from $p_\text{CatImages}$). By "following" these learned paths, gaussian noise can be transformed into cat images.
+    A diffusion model learns "paths" that begin at some initial point $x_1$ which is pure noise, and ends at a data point $x_0$ from $p_\text{data}$ (for example a cat image from $p_\text{CatImages}$). By "following" these learned paths, Gaussian noise can be transformed into cat images.
     
     Mathematically, these paths are described by differential equations (DE), coming in two types: ordinary (ODE) and stochastic (SDE). To follow a path is to solve the corresponding DE.
 
@@ -62,10 +62,20 @@ $$L=|v_\text{predicted}(x,t)-v|^2,\quad v=\alpha_t\epsilon - \beta_t x_0$$
 
 Essentially, this loss is saying that at high noise levels, the v-pred model should focus on trying to make an image, and at low noise levels it should instead focus on removing the remaining noise.
 
-### "Current Schedules are Bad"
+### ["Current Schedules are Bad"](https://arxiv.org/pdf/2305.08891)
 
-It was [found](https://arxiv.org/pdf/2305.08891) that for most noise schedules at the time, $x_1$ which is supposed to be pure gaussian noise still left a bit of the data in it, resulting the model learning very low frequency information when it shouldn't have. 
+Most training noise schedules at the time failed to make $x_1$ pure Gaussian noise, leaving behind some residual data. This caused models to learn low-frequency information that they shouldn't have, such as there being a relationship between a clean image’s average brightness and $x_1$'s channel averages.
 
-It's likely that models suffering from flawed training schedules learned the average value of the channels correlates with the average brightness of the clean image. Then since when sampling we start with pure gaussian noise (whose channel averages are 0), models always generated images with around the same brightness.
+As a result, during sampling, since we always start from true Gaussian noise (which has channel averages of zero), the model consistently generate images with similar brightness (the "uniform lighting curse").
 
-Fixing this was pretty simple, just make $x_1$ actually pure noise when training. They also recommend switching to v-pred, since again eps-pred can't learn from pure noise images.
+The fix was straightforward: We ensure at the final timestep, $x_1$ is actually pure noise. Or in technical jargon, we use a **Z**ero **T**erminal **S**ignal-to-**N**oise **R**atio (**ZTSNR**) schedule. 
+
+The authors also recommend using v-prediction instead of epsilon-prediction, since the latter can't learn from pure-noise inputs.
+
+!!!info "Why is it called ZTSNR?"
+    It's a mouthful, but it isn't that difficult to understand once you break the words apart.
+
+    - "Terminal" simply means "final."
+    - "Signal-to-Noise Ratio" (SNR) is just the ratio between the information and the noise, $\frac{\text{signal}}{\text{noise}}.$ We want pure noise, so that means there's 0 signal. $\frac0{\text{noise}}=0.$
+
+    So "Zero Terminal Signal-to-Noise Ratio" simply means at the last (terminal) timestep, there is no signal and only noise (SNR = 0).

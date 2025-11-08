@@ -87,7 +87,7 @@ Theoretically improves blending at borders / reduces seams.
 | Aspect | Description |
 | - | - |
 | Applicable To | UNets (`sd1.5`, `sdxl`) |
-| Purpose | Improve inpainting (**Improve blending at mask edges**). |
+| Purpose | Quality enhancement |
 
 - **`s1, s2`:** Skip-connection attenuation scale. Higher = suppress skip-connection outputs. Supposedly decreases unnatural details.
 - **`b1, b2`:** Backbone strengthening scale. Higher = amplify backbone outputs. Supposedly improves denoising ability.

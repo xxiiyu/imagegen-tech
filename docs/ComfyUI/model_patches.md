@@ -102,6 +102,11 @@ YMMV. Probably have to do an exhaustive search to find the best parameters.
 
 ### [FreSca](https://wikichao.github.io/FreSca/)
 
+| Aspect | Description |
+| - | - |
+| Applicable To | All models |
+| Purpose | Quality enhancement |
+
 Apply independent scaling to high-frequency (details) and low-frequency (structure) features.
 
 Paraphrasing from the paper:
@@ -133,20 +138,25 @@ Overshooting leads to low-quality images, with common issues including extreme s
 | Purpose | Mitigate overshooting. |
 | Notes | **Does nothing if cfg is 1.** |
 
-The final output becomes a mix of $x_\text{cfg}$ and a "scaled" version of $x_\text{cfg}$.
+This takes the original cfg denoised result $x_\text{cfg},$ and scale it down into $x_\text{scaled},$ to prevent overshoot. The two are then average together and that becomes the final model output. 
+
+The authors chose to not directly use $x_\text{scaled}$ as the final output, because "the generated images are overly plain." 
 
 - **`multiplier`:** cfg rescale multiplier $\phi.$ Higher = use more of the rescaled result to make the mix.
+    - For example, `0.7` means that the final output is $0.7\times x_\text{scaled} + (1-0.7)\times x_\text{cfg}.$
+
+Compared to simply lowering cfg, this ideally preserves the strong guiding effect of high cfg, but tones it down dynamically during sampling if it's about to overshoot.
 
 !!!note "Deatils"
     Changes the cfg function to the following:
     $$
-    x_\text{final}=\phi\times\frac{\text{std}(x_p)}{\text{std}(x_\text{cfg})}\times x_\text{cfg}+(1-\phi)\times x_\text{cfg}
+    x_\text{final}=\phi\times\underbrace{\frac{\text{std}(x_p)}{\text{std}(x_\text{cfg})}\times x_\text{cfg}}_{x_\text{scaled}}+(1-\phi)\times x_\text{cfg}
     $$
     Where $x_\text{final}$ is the final output and $\text{std}$ is the standard deviation.
 
     **Motivation:** $x_\text{cfg}$ may become too big, especially with high cfg and/or opposite pointing $x_p,x_n,$ making the model overshoot. 
 
-    **Fix:** Match the size of $x_\text{cfg}$ to that of $x_\text{positive}.$ Compared to simply lowering cfg, this preserves the strong guiding effect of high cfg, but tones it down dynamically during sampling if it's about to overshoot.
+    **Fix:** Match the size of $x_\text{cfg}$ to that of $x_p.$ 
 
 ### RenormCFG
 

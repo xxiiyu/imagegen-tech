@@ -18,7 +18,7 @@ At the beginning of each section you can find a summary table, formatted like be
 | Purpose | Manually change prediction type. |
 | Notes | You only need this node **if the model file doesn't contain metadata** about which type to use; If it does then comfy will detect it and this node serves no purpose. |
 
-- **`sampling`:** In practice, just match this with what the model you're using was trained on.
+- **`sampling`:** Match this with what the model you're using was trained on.
     - **`eps`:** Predict the noise to remove. Also called $\epsilon$ (**eps**ilon) prediction.
     - **`v_prediction`:** Predict the velocity (a mix between noise and data; not to be confused with flow matching's velocity).
     - **`lcm`:** [**L**atent **C**onsistency **M**odels](https://arxiv.org/abs/2310.04378) mode. Intended for [#distill models / loras](../Sampling/06_training_based_list.md) that use ideas from LCM, like SDXL Lightning, Hyper, DMD2, etc.  
@@ -109,7 +109,7 @@ YMMV. Probably have to do an exhaustive search to find the best parameters.
 
 Apply independent scaling to high-frequency (details) and low-frequency (structure) features.
 
-Paraphrasing from the paper:
+Paraphrasing:
 
 - **`scale_high: >1, scale_low: 1`:** "fine-detail enhancement"
 - **`scale_high: <1, scale_low: >1`:** "smoothing"
@@ -167,8 +167,8 @@ Compared to simply lowering cfg, this ideally preserves the strong guiding effec
 | Notes | **Does nothing if cfg is 1.** |
 
 - **`cfg_trunc`:** during sampling, set cfg to 1 at high noise levels (when `sigma > cfg_trunc`), otherwise sample normally. 
-    - This doesn't trigger comfy's fast sampling optimization, where negative is skipped if you set cfg=1, 2x-ing speed, so it's quite useless.
-    - Default is `100` because flow models' sigmas range from 1 to 0, so this is intended as the "disable this function" big value. You can connect a `Float (utils > primitive)` to it and set it bigger if you need it.
+    - This doesn't trigger comfy's fast sampling optimization (where if you set `cfg = 1`, comfy recognizes it can skip calculating the negative, resulting in 2x speed).
+    - `100`: Flow models' $\sigma$ range from 1 to 0, so this is intended as the "disable this function" big value. You can connect a `Float (utils > primitive)` to it and set it bigger if you need it.
 - **`renorm_cfg`:** cfg renorm multiplier $\rho.$ 
     - `0`: Disable.
     - `<1`: Image becomes very washed very fast.
@@ -177,7 +177,7 @@ Compared to simply lowering cfg, this ideally preserves the strong guiding effec
 !!!note "Deatils"
     Actually combines 2 techniques, [CFG-Renormalization](https://arxiv.org/abs/2412.07730) and [CFG-Truncation](https://arxiv.org/abs/2503.21758).
 
-    CFG-Renorm, like CFG-Rescale, also seeks to mitigate overshoot, and also uses $x_p$'s size as a guide. CFG-Renorm just uses this formula instead:
+    CFG-Renorm, like CFG-Rescale, also seeks to mitigate overshoot, and also uses $x_p$ as a guide. CFG-Renorm just uses this formula instead:
     $$
     x_\text{final}=\rho\times\frac{||x_p||}{||x_\text{cfg}||}\times x_\text{cfg}
     $$
@@ -195,17 +195,7 @@ Compared to simply lowering cfg, this ideally preserves the strong guiding effec
 | Notes | **Does nothing if cfg is 1.** |
 
 
-Similar to CFG-Renormalization.
-
-!!!note "Details"
-    Some differences:
-
-    || `CFGNorm` | `RenormCFG` |
-    |-| - | - |
-    | Renorm applied to | image being denoised ($x_t$) | change vector ($\epsilon, v, u,$ etc) |
-    | Norm based on | only across the channel dimension | standard L2 (across channel, height, width) |
-
-    How does this affect what comes out of `RenormCFG` vs. `CFGNorm`? IDFK, experiment ig.
+Similar to (but no the same as) CFG-Renormalization.
 
 ### [Adaptive Projected Guidance](https://arxiv.org/abs/2410.02416)
 
@@ -238,7 +228,7 @@ Some recommend **`eta: 1, norm_threshold: 20, momentum: 0`** to replace `Rescale
 
     1. **Reverse momentum:** Add a negative momentum term that pushes the model away from previously taken directions and encourages the model to focus more on the current update direction.
 
-### [Tangential Dampening CFG](https://5410tiffany.github.io/tcfg.github.io/)
+### [Tangential Damping CFG](https://5410tiffany.github.io/tcfg.github.io/)
 
 | Aspect | Content |
 | - | - |
@@ -312,3 +302,24 @@ In essence, PAG does the following:
         - Low similarity: The leap was good, trust the leap more.
 
     (Find the quick read in the link, id `2024-1208.1`. Find a graph [here](https://www.desmos.com/calculator/wcztf0ktiq) comparing normal cfg and mahiro.)
+
+## Appendix
+### Clarifying Rescale and Renorms
+
+Ultimately, all aforementioned rescale/renorm methods aim to prevent model overshooting by reducing the "size" of intermediate outputs during the sampling process.
+
+The difference lies in how they measure the size, and which intermediate output they apply resizing to:
+
+|| `RescaleCFG` | `RenormCFG` | `CFGNorm` | `Adaptive Projected Guidance` |
+|-| - | - | - | - |
+| Size measure | standard deviation | l2 norm | l2 norm | l2 norm |
+| Resizing applied to | model cfg output | model cfg output | intermediate sample | specific component of model cfg output |
+| Notes | Final output is a mix of the unscaled and scaled output | | Only uses the channel dimension to calculate size |
+
+- "model cfg output" is $x_\text{cfg}=x_\text{negative}+\text{cfg}\times(x_\text{positive}-x_\text{negative}).$ 
+- "intermediate sample" is the noise-image-mix during sampling. 
+    - For example, using a noise-prediction model, you'd repeatedly do $x_\text{next}=x_\text{prev}-x_\text{cfg}$ until $x_\text{next}$ becomes a clean image. $x_\text{next}$ is what `CFGNorm` resizes.
+- `Adaptive Projected Guidance` decomposes $\text{cfg}\times(x_\text{positive}-x_\text{negative})$ further and resizes a part of that.
+
+What implications does this have in practice? IDFK, experiment ig.
+

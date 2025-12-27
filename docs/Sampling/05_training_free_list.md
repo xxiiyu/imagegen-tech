@@ -2,19 +2,19 @@
 
 At the beginning of each section, you may find a table summarizing the samplers mentioned in the section.
 
-Sampler            | Time Spent | Order | Converges         | Notes                                 | 
-:----------------- | :--------------- | :---- | :----------- | :--------------------------------------------------- | 
-Name of the sampler | How many times **slower** than `euler`. 1x=the same as `euler`, 2x=takes twice as long as `euler`, etc              | The order, as mentioned in [#accuracy/control](./01_accuracy.md). Some technically support a range of orders, in that case, I'll include the default & range. | **Yes** (refines 1 image with more steps) / **No** (may change composition with more steps) | Some notes about the sampler | 
+| Sampler             | Time Spent                                                                                             | Order                                                                                                                                                         | Converges                                                                                   | Notes                        |
+| :------------------ | :----------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------------------------------------------------------------------------------------------ | :--------------------------- |
+| Name of the sampler | How many times **slower** than `euler`. 1x=the same as `euler`, 2x=takes twice as long as `euler`, etc | The order, as mentioned in [#accuracy/control](./01_accuracy.md). Some technically support a range of orders, in that case, I'll include the default & range. | **Yes** (refines 1 image with more steps) / **No** (may change composition with more steps) | Some notes about the sampler |
 
 ## Explicit Runge-Kutta Methods: Euler, Heun, and Beyond
-| Sampler            | Time Spent  | Order | Converges         | Notes                                  | 
-| :----------------- | :--------------- | :---- | :----------- | :--------------------------------------------------- | 
-| `euler`                 | 1x                   | 1    | Yes    | Simplest and most inaccurate, makes soft lines & blurs details. |
-| `euler_ancestral` | 1x                   | 1     | No       | Like `euler` but divergent (adds noise), popular.                        | 
-| `heun`                | 2x                  | 2      | Yes     | Can be thought of as the "improved" `euler`                             | 
-| `bosh3`              | 3x                   | 3     | Yes     | 3rd order RK                                                 | 
-| `rk4`                   | 4x                  | 4      | Yes     | 4th order RK                                               | 
-| `dopri6`               | 6x               | **5**      | Yes      | 6 model calls/step is needed for order 5.                             | 
+| Sampler           | Time Spent | Order | Converges | Notes                                                           |
+| :---------------- | :--------- | :---- | :-------- | :-------------------------------------------------------------- |
+| `euler`           | 1x         | 1     | Yes       | Simplest and most inaccurate, makes soft lines & blurs details. |
+| `euler_ancestral` | 1x         | 1     | No        | Like `euler` but divergent (adds noise), popular.               |
+| `heun`            | 2x         | 2     | Yes       | Can be thought of as the "improved" `euler`                     |
+| `bosh3`           | 3x         | 3     | Yes       | 3rd order RK                                                    |
+| `rk4`             | 4x         | 4     | Yes       | 4th order RK                                                    |
+| `dopri6`          | 6x         | **5** | Yes       | 6 model calls/step is needed for order 5.                       |
 
 `euler`, `heun`, and the rarer [`fehlberg2`](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta%E2%80%93Fehlberg_method), [`bosh3`](https://en.wikipedia.org/wiki/Bogacki%E2%80%93Shampine_method), [`rk4`](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods#The_Runge%E2%80%93Kutta_method), [`dorpi6`](https://en.wikipedia.org/wiki/Dormand%E2%80%93Prince_method), and more, all fall under the umbrella of explicit [Runge-Kutta(RK) Methods](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods) for solving ODEs. They were developed way before any diffusion model, or even any modern computer, came to be.
 
@@ -28,11 +28,11 @@ Samplers developed down the road employ optimizations specific to diffusion equa
     - **reForge:** Settings->Sampler according to [this](https://github.com/Panchovix/stable-diffusion-webui-reForge/commit/8f4d8422835aa7c2504cd3961aa86b4f65752f8b)
 
 ## Early Days of Diffusion: DDPM, DDIM, PLMS(PNDM)
-| Sampler            | Time Spent | Order | Converges         | Notes                              | 
-| :----------------- | :--------------- | :---- | :----------- | :--------------------------------------------------- |
-| `ddpm`             | 1x                      | 1     | No     | The original diffusion sampler                         | 
-| `ddim`             | 1x                     | 1     | Yes     | Converges faster than DDPM, trading a bit of quality   | 
-| `plms`=`pndm`    | 1x               | default 4 (up to 4)    | Yes   | LMS tailored for use in diffusion (uses [Adams–Bashforth](https://en.wikipedia.org/wiki/Linear_multistep_method#Adams%E2%80%93Bashforth_methods) under the hood)    | 
+| Sampler       | Time Spent | Order               | Converges | Notes                                                                                                                                                            |
+| :------------ | :--------- | :------------------ | :-------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ddpm`        | 1x         | 1                   | No        | The original diffusion sampler                                                                                                                                   |
+| `ddim`        | 1x         | 1                   | Yes       | Converges faster than DDPM, trading a bit of quality                                                                                                             |
+| `plms`=`pndm` | 1x         | default 4 (up to 4) | Yes       | LMS tailored for use in diffusion (uses [Adams–Bashforth](https://en.wikipedia.org/wiki/Linear_multistep_method#Adams%E2%80%93Bashforth_methods) under the hood) |
 
 [DDPM](https://arxiv.org/pdf/2006.11239) was what started it all, applying diffusion models to image generation, achieving really high quality but requiring a thousand steps to generate a sample. 
 
@@ -43,18 +43,19 @@ Through adjustments to the diffusion equation, people arrived at [DDIM](https://
 These 3, along with the classical ODE solvers `euler`, `heun`, and `LMS`, were the original samplers shipped with the release of the original stable diffusion.
 
 ## Steady Improvements: DEIS + iPNDM, DPM
-| Sampler            | Time Spent | Order | Converges         | Notes                                | 
-| :----------------- | :--------------- | :---- | :----------- | :--------------------------------------------------- |
-| `deis`               | 1x               | default 3 (up to 4)    | Yes  |     | 
-| `ipndm`          | 1x               | 4                             | Yes | `ipndm` found empirically better than `ipndm_v`    |
-| `ipndm_v`             | 1x               | 4                             | Yes |        | 
-| `dpm_2`              | 2x               | 2                            | Yes |        | 
-| `dpm_2_ancestral`  | 2x               | 2                              | No |       | 
-| `dpm_adaptive`  | 3x              | default 3 (2 or 3)   | Yes       | ignores steps & scheduler settings, runs until it stops itself     | 
-| `dpm_fast`         |  1x (averaged)          | between 1~3      | Yes      | Uses DPM-Solver 3,2,1 such that the number of model calls = number of steps, effectively taking the same time as `euler` would in the same number of steps  | 
+| Sampler           | Time Spent    | Order               | Converges | Notes                                                                                                                                                      |
+| :---------------- | :------------ | :------------------ | :-------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `deis`            | 1x            | default 3 (up to 4) | Yes       |                                                                                                                                                            |
+| `ipndm`           | 1x            | 4                   | Yes       | `ipndm` found empirically better than `ipndm_v`                                                                                                            |
+| `ipndm_v`         | 1x            | 4                   | Yes       |                                                                                                                                                            |
+| `dpm_2`           | 2x            | 2                   | Yes       |                                                                                                                                                            |
+| `dpm_2_ancestral` | 2x            | 2                   | No        |                                                                                                                                                            |
+| `dpm_adaptive`    | 3x            | default 3 (2 or 3)  | Yes       | ignores steps & scheduler settings, runs until it stops itself                                                                                             |
+| `dpm_fast`        | 1x (averaged) | between 1~3         | Yes       | Uses DPM-Solver 3,2,1 such that the number of model calls = number of steps, effectively taking the same time as `euler` would in the same number of steps |
 
-[DEIS](https://arxiv.org/abs/2204.13902) and [DPM](https://arxiv.org/abs/2206.00927) independently came to the same conclusion: Diffusion equations are too stiff for classical high-order solvers to do well. They use a variety of techniques to remedy this. 
-Notably, they both solve a part of the equation exactly, removing any error associated with it while leaving the rest less stiff. This idea is so good in fact that many samplers down the road also do it.
+[DEIS](https://arxiv.org/abs/2204.13902) and [DPM](https://arxiv.org/abs/2206.00927) independently came to the same conclusion: Diffusion equations are too stiff for classical high-order solvers to do well. They use a variety of techniques to remedy this.
+
+Notably, they both solve a part of the equation exactly, removing any error associated with it while leaving the rest less stiff. This idea is  called [#exponential integrators](#exponential-integrators-exact-solutions-to-linear-terms), and it's so good that many samplers down the road also do it.
 
 The DEIS paper also introduced "improved PNDM" (iPNDM). `ipndm_v` is the variable step version that should work better for diffusion, though [they find empirically](https://github.com/comfyanonymous/ComfyUI/discussions/3799) that `ipndm` performs better than `ipndm_v`.
 
@@ -63,19 +64,19 @@ The DEIS paper also introduced "improved PNDM" (iPNDM). `ipndm_v` is the variabl
     Bextoper has also noted that `ipndm_v` breaks similarly to `KSampler` in Forge.
 
 ## Cascade of New Ideas: DPM++, UniPC, Restart, RES, Gradient Estimation, ER SDE, SEEDS
-| Sampler              | Time Spent | Order | Converges         | Notes                                                    | 
-| :------------------- | :--------------- | :---- | :----------- | :--------------------------------------------------------------------- |
-| `dpmpp_2s_ancestral` | 2x               | 2     | No          | "`dpmpp`" as in "DPM Plus Plus" = "DPM++"                |
-| `dpmpp_sde`          | 2x               | 2     | No          | I *think* this is "SDE-DPM-Solver++(2S)" not found explicitly defined in the paper |
-| `dpmpp_2m`           | 1x               | 2     | Yes  |            | 
-| `dpmpp_3m_sde`       | 1x               | 3     | No |          | 
-| `uni_pc`                  | 1x               | 3            | Yes |    [Official repo](https://github.com/wl-zhao/UniPC)   | 
-| `uni_pc_bh2`           | 1x               | 3            | Yes | Empirically found a little better than `uni_pc` in guided sampling   |  
-| `Restart`                  | default 2x (varies) | default 2 (varies) | No | Time Spent & order depends on the underlying solver used (paper uses `heun`); [Official repo](https://github.com/Newbeeer/diffusion_restart_sampling) 
-| `res_multistep`      | 1x               | 2              | Yes | The authors give a general way to define `res_singlestep` for any order      | 
-| `gradient_estimation` | 1x               | 2 (?) | Yes      | Uses 2 substeps, so I guess order 2? Not sure if the notion of order really applies... | 
-| `seeds_2/3` | 2/3x | 2/3 | No |  
-| `er_sde` | 1x | default 3 (1-3) | No | [Official repo](https://github.com/QinpengCui/ER-SDE-Solver/) |
+| Sampler               | Time Spent          | Order              | Converges | Notes                                                                                                                                                 |
+| :-------------------- | :------------------ | :----------------- | :-------- | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dpmpp_2s_ancestral`  | 2x                  | 2                  | No        | "`dpmpp`" as in "DPM Plus Plus" = "DPM++"                                                                                                             |
+| `dpmpp_sde`           | 2x                  | 2                  | No        | I *think* this is "SDE-DPM-Solver++(2S)" not found explicitly defined in the paper                                                                    |
+| `dpmpp_2m`            | 1x                  | 2                  | Yes       |                                                                                                                                                       |
+| `dpmpp_3m_sde`        | 1x                  | 3                  | No        |                                                                                                                                                       |
+| `uni_pc`              | 1x                  | 3                  | Yes       | [Official repo](https://github.com/wl-zhao/UniPC)                                                                                                     |
+| `uni_pc_bh2`          | 1x                  | 3                  | Yes       | Empirically found a little better than `uni_pc` in guided sampling                                                                                    |
+| `Restart`             | default 2x (varies) | default 2 (varies) | No        | Time Spent & order depends on the underlying solver used (paper uses `heun`); [Official repo](https://github.com/Newbeeer/diffusion_restart_sampling) |
+| `res_multistep`       | 1x                  | 2                  | Yes       | The authors give a general way to define `res_singlestep` for any order                                                                               |
+| `gradient_estimation` | 1x                  | 2 (?)              | Yes       | Uses 2 substeps, so I guess order 2? Not sure if the notion of order really applies...                                                                |
+| `seeds_2/3`           | 2/3x                | 2/3                | No        |
+| `er_sde`              | 1x                  | default 3 (1-3)    | No        | [Official repo](https://github.com/QinpengCui/ER-SDE-Solver/)                                                                                         |
 
 \**(this nothing to do with StableCascade I just thought it's a cool title)*
 
@@ -125,3 +126,17 @@ Since they're not widely available, discussion is also low so there will be many
 - **[SciRE-Solver](https://arxiv.org/abs/2308.07896)**
 - **[gDDIM](https://github.com/qsh-zh/gDDIM)**
 - **[Analytic-DPM](https://github.com/baofff/Analytic-DPM)**
+
+## Tackling Stiffness Efficiently: Exponential Integrators
+| Sampler           | Time Spent | Order  | Converges | Notes                        |
+| :---------------- | :--------- | :----- | :-------- | :--------------------------- |
+| `deis`            |            |        |           | Details in previous sections |
+| `dpm(pp)`         |            |        |           | Details in previous sections |
+| `res_<k>s(_name)` | `k`x       | `<= k` | Yes       | See below                    |
+
+!!!info "Where Can I Find Higher Order RK Samplers?"  
+    - **ComfyUI:** [RES4LYF](https://github.com/ClownsharkBatwing/RES4LYF), under `exponential/`
+
+See more details about **Exponential Integrators** [#here](./04_types.md#exponential-integrators). 
+
+We can borrow the solvers that researchers in this field have developed to use as samplers, such as: `cox-matthews`, `strehmel-weiner`, `hochbruck-ostermann`, `krogstad`. Unfortunately, I'm unaware of any frontend that allows you to easily access these, other than using ComfyUI with the `RES4LYF` extension. 

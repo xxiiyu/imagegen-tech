@@ -14,8 +14,8 @@ Researchers mathematically formalize the idea of generating data as sampling fro
 !!!note "Illustrative Example"
     Imagine rolling a fair die. The possible outcomes are one of the 6 faces, with a number 1-6 on that side. The probability of each outcome is equal. The probability distribution of the dice roll $p_\text{dice}$ could thus be described as the following table:
 
-    | $\text{roll}$ | $1$ | $2$ | $3$ | $4$ | $5$ | $6$ |
-    | - | - | - | - | - | - | - | 
+    | $\text{roll}$                | $1$       | $2$       | $3$       | $4$       | $5$       | $6$       |
+    | ---------------------------- | --------- | --------- | --------- | --------- | --------- | --------- |
     | $p_\text{dice}(\text{roll})$ | $\frac16$ | $\frac16$ | $\frac16$ | $\frac16$ | $\frac16$ | $\frac16$ |
 
 Let's say we try to generate cats. One can imagine there that there exists an underlying probability distribution, $p_\text{CatImages},$ which assigns a higher probability to natural cat images, and low probability for other images like dogs. If we can sample from $p_\text{CatImages},$ that's the same as being able to generate new, high quality cat images.
@@ -30,9 +30,9 @@ $\begin{bmatrix}[100] & [0] \\ [0] & [200]\end{bmatrix}$
 
 We can also assign each image with a probability, thus creating a probability distribution for images:
 
-| $\text{Image}$ | $\begin{bmatrix}[100] & [0] \\ [0] & [200]\end{bmatrix}$ | $\begin{bmatrix}[42] & [0] \\ [0] & [42]\end{bmatrix}$ | ... |
-| - | - | - | - |
-| $p_\text{data}(\text{Image})$ | $\frac1{1234}$ | $\frac{11}{1337}$ | ... |
+| $\text{Image}$                | $\begin{bmatrix}[100] & [0] \\ [0] & [200]\end{bmatrix}$ | $\begin{bmatrix}[42] & [0] \\ [0] & [42]\end{bmatrix}$ | ... |
+| ----------------------------- | -------------------------------------------------------- | ------------------------------------------------------ | --- |
+| $p_\text{data}(\text{Image})$ | $\frac1{1234}$                                           | $\frac{11}{1337}$                                      | ... |
 
 Real world images are obviously more complex, having way bigger widths and heights, and having multiple color channels like RGB, resulting in $W\times H\times 3$ list of numbers. However, the principles stay fundamentally the same. 
 

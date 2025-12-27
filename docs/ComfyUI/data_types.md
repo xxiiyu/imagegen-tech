@@ -9,9 +9,9 @@ Also refer to Comfy docs:
 
 ## Basic Types
 
-|  | `int` | `float` / `double` | `string` | `bool` | 
-| - | - | - | - | - 
-| Semantic Meaning | Whole numbers like `12345` | Decimals like `3.14` | Text like `"I like trains"` | True or False | A collection of items | 
+|                  | `int`                      | `float` / `double`   | `string`                    | `bool`        |
+| ---------------- | -------------------------- | -------------------- | --------------------------- | ------------- |
+| Semantic Meaning | Whole numbers like `12345` | Decimals like `3.14` | Text like `"I like trains"` | True or False | A collection of items |
 
 The most complex out of these is `float` - besides being a specific type, it also encompasses the idea of the "floating point format/number", which is a smart scheme to store a very wide range of numbers with a fixed bit budget.
 
@@ -30,10 +30,10 @@ To see this in action, take a `Int (utils > primitive)` node and try inputting `
 
 **Tensors** probably won't be the direct input or output of nodes, but understanding them will nevertheless prove immensely helpful imo.
 
-| | 0D Tensor | 1D Tensor | 2D Tensor | 3D Tensor | 4D Tensor | 
-| - | - | - | - | - | - |
-| Also known as | scaler | vector | matrix | 
-| Explanation | 1 number | a list of numbers | a grid of numbers | a cube of numbers | 
+|                 | 0D Tensor     | 1D Tensor                          | 2D Tensor             | 3D Tensor          | 4D Tensor         |
+| --------------- | ------------- | ---------------------------------- | --------------------- | ------------------ | ----------------- |
+| Also known as   | scaler        | vector                             | matrix                |
+| Explanation     | 1 number      | a list of numbers                  | a grid of numbers     | a cube of numbers  |
 | ComfyUI example | `seed`, `cfg` | `sigmas` (represents noise levels) | pooled `conditioning` | raw `conditioning` | `image`, `latent` |
 
 In other words, a tensor is simply a multi-dimensional array of numbers (including 0D, a single number).

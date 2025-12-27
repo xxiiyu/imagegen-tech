@@ -68,7 +68,12 @@ Modern VAEs usually compress 8x8 = 64 normal pixels into 1 latent pixel. This is
 
 Each normal pixel usually has 3 channels: red, green, and blue. Each latent pixel has differing amounts of channels depending on model. Having more channels per latent pixel means more information could be retained, but the hardware reqs are increased.
 
-Originally, most decided to go with a 4-channel VAE, including `SD 1.X` and `SDXL`. In recent times, there has been a move towards higher channel VAEs for higher quality, see page 4 [here](https://arxiv.org/pdf/2309.15807). `Flux`, `SD 3.X`, `Lumina 2.0`, all use 16 channel VAEs. Even more recently, some have ditched latent space and gone back to directly generating in pixels, such as `PixelFlow`.
+Originally, most decided to go with a 4-channel VAE, including `SD 1.X` and `SDXL`. In recent times, there has been a move towards higher channel VAEs for higher quality, see page 4 [here](https://arxiv.org/pdf/2309.15807) for an example of text rendering. 
+- `SD1.X`, `SDXL`, `Pixart`: use 4 channel VAE.
+- `Qwen Image`, `Flux 1`, `SD 3.X`, `Lumina 2.0`: 16 channel VAE. 
+- `Flux 2`: 32 channel VAE.
+- `Hunyuan Image`: 64 channel VAE that compresses a 32x32 patch.
+- `PixelFlow`: ditched latent space and has gone back to directly genning in pixels.
 
 ## References
 

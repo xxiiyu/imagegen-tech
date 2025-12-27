@@ -13,12 +13,12 @@ Where `uncond_pred` is the model prediction without conditioning, and `cond_pred
 
 Let's play with some CFG numbers:
 
-| cfg | `cfg_result` | effect |
-| - | - | -
-| 0.1 | `uncond*0.9 + cond*0.1` | The effect that our guidance has is pretty weak. 90% of the generation process is still decided by `uncond`.
-| 0.5 | `uncond*0.5 + cond*0.5` | The strength of our guidance is on even footing with the unguided conditioning.
-| 1 | `cond` | **The `uncond` cancels out, leaving us with only `cond`.** The generation process is entirely decided by our guidance.
-| 2 | `2*cond - uncond` | **The model actively moves away from `uncond`,** while the effect that our guidance has increases even more.
+| cfg | `cfg_result`            | effect                                                                                                                 |
+| --- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| 0.1 | `uncond*0.9 + cond*0.1` | The effect that our guidance has is pretty weak. 90% of the generation process is still decided by `uncond`.           |
+| 0.5 | `uncond*0.5 + cond*0.5` | The strength of our guidance is on even footing with the unguided conditioning.                                        |
+| 1   | `cond`                  | **The `uncond` cancels out, leaving us with only `cond`.** The generation process is entirely decided by our guidance. |
+| 2   | `2*cond - uncond`       | **The model actively moves away from `uncond`,** while the effect that our guidance has increases even more.           |
 
 When implementing CFG in practice, people also noticed what we found here - namely that when `cfg > 1`, the model moves away from `uncond`. Then, couldn't we use `uncond` as some sort of opposite guidance - "Do anything but this?" Yes! This is what became negative prompts.
 

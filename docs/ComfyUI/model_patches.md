@@ -4,19 +4,19 @@ This page is roughly for nodes that input and output a `model`, modifying said m
 
 At the beginning of each section you can find a summary table, formatted like below:
 
-| Aspect | Description |
-| - | - |
+| Aspect        | Description                                                                                            |
+| ------------- | ------------------------------------------------------------------------------------------------------ |
 | Applicable To | Which models work with the node in theory. In practice you can try whatever, though results will vary. |
-| Purpose | Why / When to use this node, at least in theory. |
-| Notes | Some things that I feel are important |
+| Purpose       | Why / When to use this node, at least in theory.                                                       |
+| Notes         | Some things that I feel are important                                                                  |
 
 ### ModelSamplingDiscrete
 
-| Aspect | Description |
-| - | - |
-| Applicable To | Diffusion |
-| Purpose | Manually change prediction type. |
-| Notes | You only need this node **if the model file doesn't contain metadata** about which type to use; If it does then comfy will detect it and this node serves no purpose. |
+| Aspect        | Description                                                                                                                                                           |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Applicable To | Diffusion                                                                                                                                                             |
+| Purpose       | Manually change prediction type.                                                                                                                                      |
+| Notes         | You only need this node **if the model file doesn't contain metadata** about which type to use; If it does then comfy will detect it and this node serves no purpose. |
 
 - **`sampling`:** Match this with what the model you're using was trained on.
     - **`eps`:** Predict the noise to remove. Also called $\epsilon$ (**eps**ilon) prediction.
@@ -41,11 +41,11 @@ At the beginning of each section you can find a summary table, formatted like be
 
 ### ModelSamplingSD3
 
-| Aspect | Description |
-| - | - |
-| Applicable To | Flow Matching |
-| Purpose | Quality enhancement (**improve composition**). |
-| Notes | Sets $\sigma_\text{max}$ and $\sigma_\text{min}$ to 1 and 0, respectively, as is expected for flow matching. This unfortunately means you can't easily apply `shift` to diffusion models, even if in theory you can. |
+| Aspect        | Description                                                                                                                                                                                                          |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Applicable To | Flow Matching                                                                                                                                                                                                        |
+| Purpose       | Quality enhancement (**improve composition**).                                                                                                                                                                       |
+| Notes         | Sets $\sigma_\text{max}$ and $\sigma_\text{min}$ to 1 and 0, respectively, as is expected for flow matching. This unfortunately means you can't easily apply `shift` to diffusion models, even if in theory you can. |
 
 - **`shift`:** Higher `shift` biases the model to spend more time on higher noise levels, theoretically improving composition while removing detail.
     - `1` disables shift.
@@ -71,10 +71,10 @@ Same as `ModelSamplingSD3`.
 
 ### [DifferentialDiffusion](https://differential-diffusion.github.io/)
 
-| Aspect | Description |
-| - | - |
-| Applicable To | All models |
-| Purpose | Improve inpainting (**Improve blending at mask edges**). |
+| Aspect        | Description                                              |
+| ------------- | -------------------------------------------------------- |
+| Applicable To | All models                                               |
+| Purpose       | Improve inpainting (**Improve blending at mask edges**). |
 
 An inpaint mask, which may contain values ranging from 0 to 1, by default results in a binary decision of "this pixel should(n't) be inpainted." 
 
@@ -84,10 +84,10 @@ Theoretically improves blending at borders / reduces seams.
 
 ### [FreeU / FreeU_V2](https://chenyangsi.top/FreeU/)
 
-| Aspect | Description |
-| - | - |
+| Aspect        | Description             |
+| ------------- | ----------------------- |
 | Applicable To | UNets (`sd1.5`, `sdxl`) |
-| Purpose | Quality enhancement |
+| Purpose       | Quality enhancement     |
 
 - **`s1, s2`:** Skip-connection attenuation scale. Higher = suppress skip-connection outputs. Supposedly decreases unnatural details.
 - **`b1, b2`:** Backbone strengthening scale. Higher = amplify backbone outputs. Supposedly improves denoising ability.
@@ -102,10 +102,10 @@ YMMV. Probably have to do an exhaustive search to find the best parameters.
 
 ### [FreSca](https://wikichao.github.io/FreSca/)
 
-| Aspect | Description |
-| - | - |
-| Applicable To | All models |
-| Purpose | Quality enhancement |
+| Aspect        | Description         |
+| ------------- | ------------------- |
+| Applicable To | All models          |
+| Purpose       | Quality enhancement |
 
 Apply independent scaling to high-frequency (details) and low-frequency (structure) features.
 
@@ -132,11 +132,11 @@ Overshooting leads to low-quality images, with common issues including extreme s
 
 ### [RescaleCFG](https://arxiv.org/abs/2305.08891)
 
-| Aspect | Content |
-| - | - |
+| Aspect        | Content                                     |
+| ------------- | ------------------------------------------- |
 | Applicable To | All models (originally intended for v-pred) |
-| Purpose | Mitigate overshooting. |
-| Notes | **Does nothing if cfg is 1.** |
+| Purpose       | Mitigate overshooting.                      |
+| Notes         | **Does nothing if cfg is 1.**               |
 
 This takes the original cfg denoised result $x_\text{cfg},$ and scale it down into $x_\text{scaled}$ to prevent overshoot. The two are then averaged together and that becomes the final model output. 
 
@@ -160,11 +160,11 @@ Compared to simply lowering cfg, this ideally preserves the strong guiding effec
 
 ### RenormCFG
 
-| Aspect | Content |
-| - | - |
+| Aspect        | Content                                       |
+| ------------- | --------------------------------------------- |
 | Applicable To | All models (originally from Lumina Image 2.0) |
-| Purpose | Mitigate overshooting. |
-| Notes | **Does nothing if cfg is 1.** |
+| Purpose       | Mitigate overshooting.                        |
+| Notes         | **Does nothing if cfg is 1.**                 |
 
 - **`cfg_trunc`:** during sampling, set cfg to 1 at high noise levels (when `sigma > cfg_trunc`), otherwise sample normally. 
     - This doesn't trigger comfy's fast sampling optimization (where if you set `cfg = 1`, comfy recognizes it can skip calculating the negative, resulting in 2x speed).
@@ -188,21 +188,21 @@ Compared to simply lowering cfg, this ideally preserves the strong guiding effec
 
 ### CFGNorm
 
-| Aspect | Content |
-| - | - |
+| Aspect        | Content                                 |
+| ------------- | --------------------------------------- |
 | Applicable To | All models (originally from Hidream E1) |
-| Purpose | Mitigate overshooting. |
-| Notes | **Does nothing if cfg is 1.** |
+| Purpose       | Mitigate overshooting.                  |
+| Notes         | **Does nothing if cfg is 1.**           |
 
 
 Similar to (but no the same as) CFG-Renormalization.
 
 ### [Adaptive Projected Guidance](https://arxiv.org/abs/2410.02416)
 
-| Aspect | Content |
-| - | - |
-| Applicable To | All models. |
-| Purpose | Mitigate overshooting. |
+| Aspect        | Content                |
+| ------------- | ---------------------- |
+| Applicable To | All models.            |
+| Purpose       | Mitigate overshooting. |
 
 - **`eta`:** Scaling of parallel component. 
     - `>1`: Higher saturation.
@@ -230,10 +230,10 @@ Some recommend **`eta: 1, norm_threshold: 20, momentum: 0`** to replace `Rescale
 
 ### [Tangential Damping CFG](https://5410tiffany.github.io/tcfg.github.io/)
 
-| Aspect | Content |
-| - | - |
-| Applicable To | All models. |
-| Purpose | Mitigate overshooting. |
+| Aspect        | Content                |
+| ------------- | ---------------------- |
+| Applicable To | All models.            |
+| Purpose       | Mitigate overshooting. |
 
 **Intuition:** During sampling, the negative prediction still points towards "natural images;" Trying to move away from it thus may have unintended consequences.
 
@@ -248,11 +248,11 @@ Some recommend **`eta: 1, norm_threshold: 20, momentum: 0`** to replace `Rescale
 
 ### [Self-Attention Guidance](https://cvlab-kaist.github.io/Self-Attention-Guidance/)
 
-| Aspect | Content |
-| - | - |
-| Applicable To | All models |
-| Purpose | Quality enhancement (**clarity / remove blur and melting color blobs**)  |
-| Notes | **Reduce your cfg accordingly. Increases generation time.** |
+| Aspect        | Content                                                                 |
+| ------------- | ----------------------------------------------------------------------- |
+| Applicable To | All models                                                              |
+| Purpose       | Quality enhancement (**clarity / remove blur and melting color blobs**) |
+| Notes         | **Reduce your cfg accordingly. Increases generation time.**             |
 
 - **`scale`:** how much the SAG results influence things. Higher = more effect.
 - **`blur_sigma`:** the std of the Gaussian it uses for blur guidance. Higher = more aggressive blurring.
@@ -268,11 +268,11 @@ It probably doesn't help in regions where the model is confident, whether confid
 
 ### [PerturbedAttentionGuidance](https://cvlab-kaist.github.io/Perturbed-Attention-Guidance/)
 
-| Aspect | Content |
-| - | - |
-| Applicable To | All models |
-| Purpose | Quality enhancement (**remove degraded predictions**)  |
-| Notes | **Reduce your cfg accordingly: `PAG_scale + new_cfg = original_cfg`** should be a good rule of thumb. **Increases generation time.** |
+| Aspect        | Content                                                                                                                              |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Applicable To | All models                                                                                                                           |
+| Purpose       | Quality enhancement (**remove degraded predictions**)                                                                                |
+| Notes         | **Reduce your cfg accordingly: `PAG_scale + new_cfg = original_cfg`** should be a good rule of thumb. **Increases generation time.** |
 
 Sequel to `Self-Attention Guidance`. They do different things, so you can use both at once.
 
@@ -283,10 +283,10 @@ In essence, PAG does the following:
 
 ### [Mahiro is so cute that she deserves a better guidance function!! (。・ω・。)](https://huggingface.co/spaces/yoinked/blue-arxiv)
 
-| Aspect | Content |
-| - | - |
-| Applicable To | All models |
-| Purpose | Quality enhancement (**Better alignment to positive**)  |
+| Aspect        | Content                                                |
+| ------------- | ------------------------------------------------------ |
+| Applicable To | All models                                             |
+| Purpose       | Quality enhancement (**Better alignment to positive**) |
 
 **Motivation:** normal cfg's negative prompt implicitly has the effect of making the model pay attention to the polar opposite of said negative.
 
@@ -310,11 +310,11 @@ Ultimately, all aforementioned rescale/renorm methods aim to prevent model overs
 
 The difference lies in how they measure the size, and which intermediate output they apply resizing to:
 
-|| `RescaleCFG` | `RenormCFG` | `CFGNorm` | `Adaptive Projected Guidance` |
-|-| - | - | - | - |
-| Size measure | standard deviation | l2 norm | l2 norm | l2 norm |
-| Resizing applied to | model cfg output | model cfg output | intermediate sample | specific component of model cfg output |
-| Notes | Final output is a mix of the unscaled and scaled output | | Only uses the channel dimension to calculate size |
+|                     | `RescaleCFG`                                            | `RenormCFG`      | `CFGNorm`                                         | `Adaptive Projected Guidance`          |
+| ------------------- | ------------------------------------------------------- | ---------------- | ------------------------------------------------- | -------------------------------------- |
+| Size measure        | standard deviation                                      | l2 norm          | l2 norm                                           | l2 norm                                |
+| Resizing applied to | model cfg output                                        | model cfg output | intermediate sample                               | specific component of model cfg output |
+| Notes               | Final output is a mix of the unscaled and scaled output |                  | Only uses the channel dimension to calculate size |
 
 - "model cfg output" is $x_\text{cfg}=x_\text{negative}+\text{cfg}\times(x_\text{positive}-x_\text{negative}).$ 
 - "intermediate sample" is the noise-image-mix during sampling. 

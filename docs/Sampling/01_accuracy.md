@@ -2,7 +2,7 @@
 
 You've probably seen something like this in other diffusion guides:
 
-> `DPM++` is better \[than `Euler`\] for "accuracy" / "precision" / "control".
+> `DPM++` is better [than `Euler`] for "accuracy" / "precision" / "control".
 
 Viewing sampling through the lens of solving the diffusion **differential equation (DE)**, it becomes clearer what this could mean - to solve the DE more accurately. In math terms, we'd say that the more accurate solver is higher **order.**
 
@@ -37,12 +37,12 @@ Let's assume for simplicity that the error of any sampler taking 1 step is 10. A
 
 Now, let's take `euler`, `heun`, and `bosh3`, which have an order of 1, 2, 3 respectively, and look at the error at various steps:
 
-| steps | `euler` | `heun` | `bosh3`
-| - | - | - | -
-| 2 | `10 / 2` = 5 | `10 / (2*2)` = 2.5 | `10 / (2*2*2)` = 1.25
-| 3 | `10 / 3` ≈ 3 | `10 / (3*3)` ≈ 1.1 | `10 / (3*3*3)` ≈ 0.37
-| 4 | `10 / 4` = 2.5 | `10 / (4*4)` = 0.625 | `10 / (4*4*4)` ≈ 0.156
-| `n` | `10 / n` | `10 / (n*n)` | `10 / (n*n*n)` 
+| steps | `euler`        | `heun`               | `bosh3`                |
+| ----- | -------------- | -------------------- | ---------------------- |
+| 2     | `10 / 2` = 5   | `10 / (2*2)` = 2.5   | `10 / (2*2*2)` = 1.25  |
+| 3     | `10 / 3` ≈ 3   | `10 / (3*3)` ≈ 1.1   | `10 / (3*3*3)` ≈ 0.37  |
+| 4     | `10 / 4` = 2.5 | `10 / (4*4)` = 0.625 | `10 / (4*4*4)` ≈ 0.156 |
+| `n`   | `10 / n`       | `10 / (n*n)`         | `10 / (n*n*n)`         |
 
 In general, if the order of a sampler is `O`, and the error it makes when you take 1 step is `E`, then the error if you take `N` steps would be around `E / (N^O)`.
 
@@ -55,5 +55,6 @@ So in theory, you can get better bang (accuracy) for your buck (time) by using h
 
 The high stiffness of diffusion DEs makes out-of-the-box high-order samplers do poorly though. Using stiff-resistant techniques is recommended, for example:
 
-- Implicit methods like [`gauss-legendre`](https://en.wikipedia.org/wiki/Gauss%E2%80%93Legendre_method)
-- Exponential integrators like `deis` (and most ODE samplers that came after, including the `dpm(pp)` family, `res` (Refined Exponential Solver), etc.)
+- Implicit methods like [`gauss-legendre`](https://en.wikipedia.org/wiki/Gauss%E2%80%93Legendre_method). They're not really used in practice, in favor of...
+- Exponential integrators, beginning with `deis`, and most ODE samplers that came after, including the `dpm(pp)` family, `res` (Refined Exponential Solver), etc.
+    - You may see some unfamiliar names here, like `cox-matthews`, `strehmel-weiner`, `hochbruck-ostermann`, `krogstad`, ... To clarify, these are people who developed the coefficients for exponential integrator solvers. To see more specifics about them, check the [#exponential integrators](./04_types.md#exponential-integrators) section.

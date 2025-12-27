@@ -3,6 +3,9 @@
 !!!warning "UNDER CONSTRUCTION"  
 	This section is incomplete and subject to massive changes. 
 
+!!!note "Applicability"
+	Note that this section is mostly written with **SDXL** in mind. Others such as Z-Image-*Turbo* doesn't use the same techniques as the `turbo` mentioned here.
+
 - **[`lcm`](https://arxiv.org/abs/2310.04378):** [Consistency Models](https://arxiv.org/abs/2303.01469) defines a new training objective for the model - to learn the "consistency function (CF)," which is some function `f(x, t) = x_0` that takes the current noisy image and the time step, and outputs the origin - that is, the completely denoised image. LCM applies the idea to latent-based models (like stable diffusion).
 	- Sampling in 1 step in practice doesn't yield great images. To fix this, they enable it to run multiple steps by re-injecting noise. The procedure is: 1st prediction, inject noise back, predict again, ... repeat.
 - **[`turbo`](https://huggingface.co/stabilityai/sdxl-turbo):** Paper authors use both adversarial loss and distillation loss to further train a model to allow it to generate images in a few steps.

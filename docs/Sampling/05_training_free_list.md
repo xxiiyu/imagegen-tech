@@ -97,9 +97,13 @@ To address issues with high CFG, [DPM++](https://arxiv.org/abs/2211.01095) adds 
 
 [Restart](https://arxiv.org/abs/2306.14878) doesn't actually introduce a new sampler, instead focusing on the discrepancy between trying to solve diffusion as an ODE (no noise injections) vs. an SDE (injects noise at every step). To get the best of both worlds, Restart proposes that rather than injecting noise at every step, let's do it in infrequent intervals.
 ![](https://raw.githubusercontent.com/Newbeeer/diffusion_restart_sampling/refs/heads/main/assets/restart.png)
-<center>*Visualization of ODE, SDE, and Restart taken from their [official repo](https://github.com/Newbeeer/diffusion_restart_sampling)*</center>
+*Visualization of ODE, SDE, and Restart taken from their [official repo](https://github.com/Newbeeer/diffusion_restart_sampling)*
 
-[RES](https://arxiv.org/abs/2308.02157) identified an overlooked set of conditions that solvers must satisfy to achieve their claimed order (they find that `dpmpp` doesn't satisfy some of these, leading to worse-than-expected results). They then unify the equation for noise prediction and data prediction, making analysis easier. Finally, they pick coefficients that satisfy these additional conditions.
+[RES](https://arxiv.org/abs/2308.02157) examined the order conditions that solvers must satisfy to achieve their claimed accuracy. They find for example `dpmpp` doesn't satisfy some of these, leading to worse-than-expected results. They then unify the equation for noise prediction and data prediction, making analysis easier. Finally, they pick coefficients that satisfy these additional conditions.
+
+!!!info "On RES's Contributions"
+    It's worth noting that RES did not discover the order conditions nor the coefficients satisfying them; those achievements mainly go to Hochbruck and Ostermann's works on Exponential Integrators.  
+    What RES did do is apply these already-known theories to diffusion samplers at the time.
 
 [Gradient Estimation](https://arxiv.org/abs/2306.04848) finds that denoising can be interpreted as a form of gradient descent, and designs a sampler based on it.
 
@@ -128,15 +132,14 @@ Since they're not widely available, discussion is also low so there will be many
 - **[Analytic-DPM](https://github.com/baofff/Analytic-DPM)**
 
 ## Tackling Stiffness Efficiently: Exponential Integrators
-| Sampler           | Time Spent | Order  | Converges | Notes                        |
-| :---------------- | :--------- | :----- | :-------- | :--------------------------- |
-| `deis`            |            |        |           | Details in previous sections |
-| `dpm(pp)`         |            |        |           | Details in previous sections |
-| `res_<k>s(_name)` | `k`x       | `<= k` | Yes       | See below                    |
+| Sampler                         | Time Spent | Order  | Converges | Notes                        |
+| :------------------------------ | :--------- | :----- | :-------- | :--------------------------- |
+| `deis`, `dpm(pp)`, `unipc`, ... |            |        |           | Details in previous sections |
+| `res_<k>s(_name)`               | `k`x       | `<= k` | Yes       | See below                    |
 
-!!!info "Where Can I Find Higher Order RK Samplers?"  
+!!!info "Where Can I Find More Exponential Integrator Samplers?"  
     - **ComfyUI:** [RES4LYF](https://github.com/ClownsharkBatwing/RES4LYF), under `exponential/`
 
 See more details about **Exponential Integrators** [#here](./04_types.md#exponential-integrators). 
 
-We can borrow the solvers that researchers in this field have developed to use as samplers, such as: `cox-matthews`, `strehmel-weiner`, `hochbruck-ostermann`, `krogstad`. Unfortunately, I'm unaware of any frontend that allows you to easily access these, other than using ComfyUI with the `RES4LYF` extension. 
+We can borrow the solvers that researchers in this field have developed to use as samplers, such as `cox-matthews`, `strehmel-weiner`, `hochbruck-ostermann`, `krogstad`, etc. Unfortunately, I'm unaware of any frontend that allows you to easily access these, other than using ComfyUI with the `RES4LYF` extension. 

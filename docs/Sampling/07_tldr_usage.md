@@ -33,4 +33,4 @@ Generally, these samplers beat their non-composition-changing counterparts if yo
 
 !!!note "But `X` Worked/Broke For Me!"  
     These are very rough estimates. You should see these only as general rules of thumb on what works in low / high step environments.  
-    For example, most SDXL v-pred models require a ton more steps with any sampler, 20+ for only decent results in my experience.
+    For example, *many* Illustrious derivative models contain DMD2, but they don't tell you. If done well, you'll hardly notice any artifacts, while being able to gen in the very low step regime no problem.

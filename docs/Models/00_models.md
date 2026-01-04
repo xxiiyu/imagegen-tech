@@ -72,10 +72,10 @@ The **loss (function) $L$**, also called the **cost** or **objective**, is a fun
 !!!note "Illustrative Example"
     Let's say you're trying to predict house prices. A simple and common loss function for this task could be $L=|\text{TruePrice} - \text{PredictedPrice}|^2$, the square of the difference between the true price and the predicted price. As you can imagine, trying to minimize the loss $L$ is the same as trying to reduce the difference between the true price and the prediction, or in other words make the prediction more accurate. 
 
-!!!info "Why Minimize the Square?"
-    You may ask, why minimize the difference squared and not just the difference? An intuitive explanation is this: If the difference between the true price and the predicted price is big, then the square will extrapolate it to be bigger. This means we punish the model way harder if it makes a wildly inaccurate prediction.
-    
-    There are more math-heavy reasons rooted in statistics, the details of which are out of the scope of this article. (For those interested in searchable keywords, minimizing the squared difference - the L2 loss - corresponds to maximizing the likelihood, under the assumption that the random errors are normally distributed.)
+    ???info "Why Minimize the Square?"
+        You may ask, why minimize the difference squared and not just the difference? An intuitive explanation is this: If the difference between the true price and the predicted price is big, then the square will extrapolate it to be bigger. This means we punish the model way harder if it makes a wildly inaccurate prediction.
+        
+        There are more math-heavy reasons rooted in statistics, the details of which are out of the scope of this article. (For those interested in searchable keywords, minimizing the squared difference - the L2 loss - corresponds to maximizing the likelihood, under the assumption that the random errors are normally distributed.)
 
 ### What is Adversarial Loss?
 

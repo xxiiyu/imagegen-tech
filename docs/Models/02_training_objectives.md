@@ -1,35 +1,35 @@
 # Training Diffusion Models
 
 !!!note "Recap: [#How Diffusion Generates Images](./01_diffusion.md#how-2-diffuse)"
-    A diffusion model learns "paths" that begin at some initial point $x_1$ which is pure noise, and ends at a data point $x_0$ from $p_\text{data}$ (for example a cat image from $p_\text{CatImages}$). By "following" these learned paths, Gaussian noise can be transformed into cat images.
+    A diffusion model learns things called **probability paths,** that begin at some initial point $x_1=\epsilon$ which is pure noise, and ends at a data point $x_0$ from $p_\text{data}$ (for example a cat image from $p_\text{CatImages}$). By "following" these learned paths, Gaussian noise can be transformed into cat images.
     
     Mathematically, these paths are described by differential equations (DE), coming in two types: ordinary (ODE) and stochastic (SDE). To follow a path is to solve the corresponding DE.
 
 ## Flow and Score Matching Loss
 
-A diffusion model usually is designed to have two inputs, a noisy image $x$ and the timestep $t.$ To train the diffusion model, there are two common options, **flow matching** or **score matching**:
+Depending on if you wish to model the transformation from noise to image as an ODE or SDE, we can arrive at 2 objectives: **flow matching** and **score matching.** A diffusion model takes 2 inputs, a noisy image $x_t$ and the timestep $t,$ and tries to minimize the chosen loss.
 
-| Aspect                          | Flow Matching                                                                                                                                                                           | Score Matching                                                                                                                                                                     |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Type                            | ODE                                                                                                                                                                                     | SDE                                                                                                                                                                                |
-| Loss                            | $\|u_\text{predicted}(x,t)-u_\text{true}(x,t)\|^2$                                                                                                                                      | $\|s_\text{predicted}(x,t)-s_\text{true}(x,t)\|^2$                                                                                                                                 |
-| Predicted Quantity              | Think of $u$ as the "velocity." Given your position ($x$) and how far along the path you are ($t$), $u$ is how fast and in which direction to walk to eventually get to the path's end. | $s$ is the **score,** defined as the gradient of the log of the probability distribution $s(x,t)=\nabla_x\log p_t(x,t).$ Note that technically SDE needs both $u$ and $s$ to work. |
-| Under Practical Conditions...\* | $u_\text{true}(x,t)=x_0-x_1,$ which is very simple and stable to train on. (Also relating to something called the Optimal Transport in literature)                                      | You don't actually need to train two models. One option is to make the neural network output two things ($u$ and $s$) at the same time. Also see below.                            |
-| Models                          | Most modern models use this, like `SD 3.X`, `Flux`, `Lumina`, `Qwen-Image`, `Wan`, etc.                                                                                                 | The original SD releases are noise predictors, like `SD 1.X`, `SDXL`, etc.                                                                                                         |
+| Aspect             | Flow Matching                                                                                                                                                                                    | Score Matching                                                                                                                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Type               | ODE                                                                                                                                                                                              | SDE                                                                                                                                                                                         |
+| Loss               | $\|u_\text{predicted}(x,t)-u_\text{true}(x,t)\|^2$                                                                                                                                               | $\|s_\text{predicted}(x,t)-s_\text{true}(x,t)\|^2$                                                                                                                                          |
+| Predicted Quantity | $u$ is the **velocity.** Given your position ($x$) and how far along the path you are ($t$), $u$ is how fast and in which direction to walk to eventually get to the path's end (a clean image). | $s$ is the **score,** defined as the gradient of the log of the probability distribution $s(x,t)=\nabla_x\log p(x,t).$ $s$ points in the direction where the image is most likely to exist. |
+| Models             | Most modern models use this, like `SD 3.X`, `Flux`, `Lumina`, `Qwen-Image`, `Wan`, etc.                                                                                                          | The original SD releases are noise predictors, like `SD 1.X`, `SDXL`, etc.                                                                                                                  |
 
-\*Stil under the same practical conditions: 
+In practice, because we're trying to model the transformation from (gaussian) noise to clean image, this has many positive implications. Important implications include:
 
-- $u$ and $s$ can be converted between each other. 
-    - This means you can e.g. use SDE sampling with a flow matching model by doing the correct math conversion; A sampler designed for one can be used on the other, etc.
-    - Another way to bypass needing two models for score matching, is only train a $u$ predictor then turn it into $s$ with math afterwards, or vice versa.
-- A score matching model is equivalent to a **noise prediction** model which predicts the noise to remove from images. Thus, these models are also called **denoising diffusion** models.
+1. $u$ and $s$ are **mathematically equivalent** and can be **converted from one to another.**
+1. **For flow matching:** This can simplify the training target down to $u_\text{true}(x,t)=x_0-\epsilon,$ or in other words, the difference between a sample of pure noise $\epsilon$ and a completely clean image $x_0.$ This is very easy and stable to train on.
+1. **For score matching:** Since you can calculate $u$ from $s$, this means we only need to train the model to learn the score $s;$ Whereas in the most general case you need both for simulating SDE.  
+Additionally, a score matching model is equivalent to a **noise prediction** model which predicts the noise to remove from images. Thus, these models are also called **denoising diffusion** models.
+1. While flow matching/score matching models are trained to learn ODE/SDEs respectively, due to their equivalence, **you can use both ODE and SDE samplers on the either of them.**
 
-Since the "practical conditions" are almost always met in practice, and basically all models on the market satisfy them, I'll be assuming they're true from here on. 
+???note "Oversimplifications, Differing Notation, and More Details" 
+    The above section is oversimplified for clarity, and uses a specific notation that may be different to other literature.
 
-!!!info "What are these practical conditions?"
-    I've skipped the details in the main text since it's math heavy, and you can assume that they're satisfied most of the time anyway, but the conditions are that:
-    
-    The models have Gaussian probability paths, which mathematically have the form of $\mathcal N(\alpha_t z; \beta_t^2I_d),$ where $\alpha, \beta$ are noise schedulers (monotonic, continuously differentiable, and $\alpha_1=\beta_0=0$ and $\alpha_0=\beta_1=1$).
+    1. $x_0-x_1$ is not *the* flow matching target, but *a* target out of many possible choices. It is however the most common, and the one based on Optimal Transport.
+    2. Some works may use a reversed time notation, where the "start" is the clean image and the "end" is the pure noise. Early works deriving diffusion from Markov Chains also may use timesteps $t$ from $T=1000\to0$ rather than $0\to1.$  
+    In any case, the general idea of learning paths whose 2 ends are data and noise, and walking this path to transform between the 2 stay the same.
 
 ## Hurdles in Score Matching
 
@@ -71,6 +71,8 @@ As a result, during sampling, since we always start from true Gaussian noise (wh
 The fix was straightforward: We ensure at the final timestep, $x_1$ is actually pure noise. Or in technical jargon, we use a **Z**ero **T**erminal **S**ignal-to-**N**oise **R**atio (**ZTSNR**) schedule. 
 
 The authors also recommend using v-prediction instead of epsilon-prediction, since the latter can't learn from pure-noise inputs.
+
+They also find that a "trailing" schedule is more efficent than others. In common UIs, that means switching from the `normal` schedule to the `sgm_uniform` schedule.
 
 !!!info "Why is it called ZTSNR?"
     It's a mouthful, but it isn't that difficult to understand once you break the words apart.

@@ -18,7 +18,7 @@ The theoretical quality of images generated based on non-stochastic vs. stochast
 
 ### Why Stochasticity Break Flux and More
 
-SD 3.X, Flux, AuraFlow, Lumina 2, and potentially more to come, all use an architecture based on Flow Matching / [Rectified Flow (RF)](https://arxiv.org/pdf/2209.03003), which is very sensitive to the variance (a statistical measure) of the data. 
+SD 3.X, Flux, AuraFlow, Lumina 2, and potentially more to come, were all trained on a schedule which is very sensitive to the variance (a statistical measure) of the data. 
 
 Without careful calibration, chances are that your stochastic sampler makes the variance increase without bound, thus breaking these models. This is why people weren't having luck using anything `ancestral` or `sde` etc. on them.
 

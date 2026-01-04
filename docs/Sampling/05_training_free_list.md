@@ -59,7 +59,7 @@ Notably, they both solve a part of the equation exactly, removing any error asso
 
 The DEIS paper also introduced "improved PNDM" (iPNDM). `ipndm_v` is the variable step version that should work better for diffusion, though [they find empirically](https://github.com/comfyanonymous/ComfyUI/discussions/3799) that `ipndm` performs better than `ipndm_v`.
 
-!!!note "Differing Results With `ipndm_v`"  
+???note "Differing Results With `ipndm_v`"  
     In my personal tests in ComfyUI, for some reason, I find for the same exact parameters - prompt, seed, etc. - `ipndm_v` sometimes breaks (lots of artifacts) if you use `KSampler`, but not if you use `SamplerCustomAdvanced`. In fact, I've never gotten any image breakdown with `SamplerCustomAdvanced` + `ipndm_v`, unless at low steps where it hasn't converged.  
     Bextoper has also noted that `ipndm_v` breaks similarly to `KSampler` in Forge.
 
@@ -90,7 +90,7 @@ To address issues with high CFG, [DPM++](https://arxiv.org/abs/2211.01095) adds 
 - Switch from noise (eps, $\epsilon$) prediction to data ($x_0$) prediction (which they show is better by a constant in Appendix B).
 - The above also allows them to apply thresholding to push the sample back into training data range.
 
-!!!info "Practical; Not a Technical Marvel"  
+???info "DPM++: Practical, Not a Technical Marvel"  
     The `dpmpp` family, especially `dpmpp_2m`, are one of the most widely used samplers alongside `euler_ancestral`. However, it was [rejected](https://openreview.net/forum?id=4vGwQqviud5) by ICLR due to heavily relying on existing works, so it "does not contain enough technical novelty."
 
 [UniPC](https://arxiv.org/abs/2302.04867) came soon after. Inspired by the [predictor-corrector](https://en.wikipedia.org/wiki/Predictor%E2%80%93corrector_method) ODE methods, they develop UniC, a corrector that can be directly plugged after any existing sampler to increase its accuracy. As a byproduct, they derive UniP from the same equation as UniC, which is a predictor that can go up to any arbitrary order. The two combine to UniPC, achieving SOTA results using order=3.
@@ -101,7 +101,7 @@ To address issues with high CFG, [DPM++](https://arxiv.org/abs/2211.01095) adds 
 
 [RES](https://arxiv.org/abs/2308.02157) examined the order conditions that solvers must satisfy to achieve their claimed accuracy. They find for example `dpmpp` doesn't satisfy some of these, leading to worse-than-expected results. They then unify the equation for noise prediction and data prediction, making analysis easier. Finally, they pick coefficients that satisfy these additional conditions.
 
-!!!info "On RES's Contributions"
+???info "On RES's Contributions"
     It's worth noting that RES did not discover the order conditions nor the coefficients satisfying them; those achievements mainly go to Hochbruck and Ostermann's works on Exponential Integrators.  
     What RES did do is apply these already-known theories to diffusion samplers at the time.
 

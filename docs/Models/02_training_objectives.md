@@ -1,9 +1,9 @@
 # Training Diffusion Models
 
 !!!note "Recap: [#How Diffusion Generates Images](./01_diffusion.md#how-2-diffuse)"
-    A diffusion model learns things called **probability paths,** that begin at some initial point $x_1=\epsilon$ which is pure noise, and ends at a data point $x_0$ from $p_\text{data}$ (for example a cat image from $p_\text{CatImages}$). By "following" these learned paths, Gaussian noise can be transformed into cat images.
+    A diffusion model learns things called **velocity fields** that traverse paths which start at noise and end at image. This is the same as transforming noise into images.
     
-    Mathematically, these paths are described by differential equations (DE), coming in two types: ordinary (ODE) and stochastic (SDE). To follow a path is to solve the corresponding DE.
+    Mathematically, these are described by differential equations (DE), coming in two types: ordinary (ODE) and stochastic (SDE). To follow a path is to solve the corresponding DE.
 
 ## Flow and Score Matching Loss
 
@@ -16,10 +16,10 @@ Depending on if you wish to model the transformation from noise to image as an O
 | Predicted Quantity | $u$ is the **velocity.** Given your position ($x$) and how far along the path you are ($t$), $u$ is how fast and in which direction to walk to eventually get to the path's end (a clean image). | $s$ is the **score,** defined as the gradient of the log of the probability distribution $s(x,t)=\nabla_x\log p(x,t).$ $s$ points in the direction where the image is most likely to exist. |
 | Models             | Most modern models use this, like `SD 3.X`, `Flux`, `Lumina`, `Qwen-Image`, `Wan`, etc.                                                                                                          | The original SD releases are noise predictors, like `SD 1.X`, `SDXL`, etc.                                                                                                                  |
 
-In practice, because we're trying to model the transformation from (gaussian) noise to clean image, this has many positive implications. Important implications include:
+In practice, because we're trying to model the transformation from (gaussian) noise to clean image, this has many positive implications. Important ones include:
 
 1. $u$ and $s$ are **mathematically equivalent** and can be **converted from one to another.**
-1. **For flow matching:** This can simplify the training target down to $u_\text{true}(x,t)=x_0-\epsilon,$ or in other words, the difference between a sample of pure noise $\epsilon$ and a completely clean image $x_0.$ This is very easy and stable to train on.
+1. **For flow matching:** This can simplify the training target down to $u_\text{true}(x,t)=x_1-\epsilon,$ or in other words, the difference between a sample of pure noise $\epsilon$ and a completely clean image $x_1.$ This is very easy and stable to train on.
 1. **For score matching:** Since you can calculate $u$ from $s$, this means we only need to train the model to learn the score $s;$ Whereas in the most general case you need both for simulating SDE.  
 Additionally, a score matching model is equivalent to a **noise prediction** model which predicts the noise to remove from images. Thus, these models are also called **denoising diffusion** models.
 1. While flow matching/score matching models are trained to learn ODE/SDEs respectively, due to their equivalence, **you can use both ODE and SDE samplers on the either of them.**
@@ -27,8 +27,8 @@ Additionally, a score matching model is equivalent to a **noise prediction** mod
 ???note "Oversimplifications, Differing Notation, and More Details" 
     The above section is oversimplified for clarity, and uses a specific notation that may be different to other literature.
 
-    1. $x_0-x_1$ is not *the* flow matching target, but *a* target out of many possible choices. It is however the most common, and the one based on Optimal Transport.
-    2. Some works may use a reversed time notation, where the "start" is the clean image and the "end" is the pure noise. Early works deriving diffusion from Markov Chains also may use timesteps $t$ from $T=1000\to0$ rather than $0\to1.$  
+    1. $x_1-\epsilon$ is not *the* flow matching target, but *a* target out of many possible choices. It is however the most common, and the one based on Optimal Transport.
+    2. Some works use a reversed time notation, where the "start" is the clean image and the "end" is the pure noise. Early works deriving diffusion from Markov Chains also may use timesteps $t$ from $T=1000\to0$ rather than $0\to1.$  
     In any case, the general idea of learning paths whose 2 ends are data and noise, and walking this path to transform between the 2 stay the same.
 
 ## Hurdles in Score Matching
@@ -47,20 +47,23 @@ DDPM drops the red part of the original loss, and reparameterizes the score matc
 
 $$L=|\epsilon_\text{predicted}(x,t)-\epsilon|^2$$
 
-### Noise Prediction to (Tangential) Velocity Prediction
+### Noise Prediction to Velocity Prediction
 
 eps-pred becomes a problem again in few-steps sampling. At the extreme of 1 step, we're trying to generate a clean image from pure noise, however the eps-pred model *only* predicts the *noise to remove* from an image. Removing noise from pure noise results in... nothing. Empty. Oops, that's bad.
 
-That's the problem the authors of [this](https://arxiv.org/pdf/2202.00512) work faced. They propose a few reparameterizations that fix this, the most influential of which being **(tangential) velocity prediction (v-pred):**  
+That's the problem researchers of [this](https://arxiv.org/pdf/2202.00512) work faced. They propose a few reparameterizations that fix this, the most influential of which being **velocity prediction (v-pred):**  
 
-$$L=|v_\text{predicted}(x,t)-v|^2,\quad v=\alpha_t\epsilon - \beta_t x_0$$
+$$L=|v_\text{predicted}(x,t)-v|^2,\quad v=\alpha_t\epsilon-\sigma_tx_1$$
 
-!!!note "Tangential Velocity $v$ and Velocity $u$"
+For v-pred, $\alpha_t,\sigma_t$ are set in such a way which represents that the v-pred model should focus on trying to make an image, and at low noise levels it should focus on removing the remaining noise.
+
+???note "Tangential Velocity $v$ and Flow Matching Velocity $u$"
     You might remember that there was also a "velocity" $u,$ that being what the flow matching models predict. On the other hand, v-pred is also often also called velocity prediction. How do they relate to each other?
 
-    Confusingly, they really don't. v-pred comes from an angular parameterization, where you can find a visual in the same paper on [page 15](https://arxiv.org/pdf/2202.00512#page=15). 
-
-Essentially, this loss is saying that at high noise levels, the v-pred model should focus on trying to make an image, and at low noise levels it should instead focus on removing the remaining noise.
+    While they come from different mathematical formulations, they coincidentally ended up with very similar results. The equation of both take the form of $v=\alpha_t\epsilon-\sigma_tx_1.$ However: 
+    
+    - $v$ is interpreted as angular velocity on a circle, where you can find a visual [here](https://arxiv.org/pdf/2202.00512#page=15). This lead them to set $\alpha_t,\sigma_t$ to trigonometric values dependent on $t$.
+    - $u$ is straight velocity from noise directly to data. This lead them to set a constant $u=x_1-\epsilon$ (for rectified flow anyway, which is what most use)
 
 ### ["Current Schedules are Bad"](https://arxiv.org/pdf/2305.08891)
 

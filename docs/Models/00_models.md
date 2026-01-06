@@ -1,6 +1,6 @@
 # What is a Model?
 
-A **generative model** learns to create new data similar to the training data. This is in contrast to a **Discriminative model** which learns to look at a new data point and predict a label or number. For images, you can imagine that:
+A **generative model** learns to create new data similar to the training data. This is in contrast to a **discriminative model** which learns to look at a new data point and predict a label or number. For images, you can imagine that:
 
 - generative model: learns to make new images
 - discriminative model: learns to classify it as cat or dog / predict auction price

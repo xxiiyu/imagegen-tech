@@ -8,6 +8,6 @@ Guidance can take many forms, from text prompts, to other input images, a hypern
 
 <div class="grid cards" markdown>
 
--	[Classifier-Free Guidance](./CFG/00_cfg.md)
+- [Classifier-Free Guidance](./CFG/00_cfg.md)
 
 </div>

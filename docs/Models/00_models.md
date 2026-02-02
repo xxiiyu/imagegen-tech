@@ -1,9 +1,9 @@
-# What is a Model?
+# Introduction To Generative Models
 
 A **generative model** learns to create new data similar to the training data. This is in contrast to a **discriminative model** which learns to look at a new data point and predict a label or number. For images, you can imagine that:
 
 - generative model: learns to make new images
-- discriminative model: learns to classify it as cat or dog / predict auction price
+- discriminative model: learns to classify given images as cat or dog
 
 In modern day, generative models are usually deep neural networks, including GANs, VAEs, Language Models, and of course diffusion models.
 
@@ -11,10 +11,8 @@ In modern day, generative models are usually deep neural networks, including GAN
 
 "Generating" new data, like images, is formalized as **sampling from a probability distribution $p_\text{data}$.** 
 
-- A probability distribution assigns probabilities to a set of specific objects. For example, a probability distribution for cat images $p_\text{Cat}$ would assign a high probability to cats, but a low probability to dogs, humans, plants, etc.
-- Sampling means to pick out data points from a larger population. In our case, that means looking at $p_\text{Cat}$ and picking out those with high probability - so, cat images!
-
-The goal of generative modeling can now be formalized as to allow us to sample from $p_\text{data},$ when $p_\text{data}$ itself could be extremely complicated.
+- A probability distribution assigns probabilities to a set of specific objects. For example, a probability distribution for cat images $p_\text{Cat}$ would assign a high probability to cats, but a low probability to dogs, humans, plants, and everything else.
+- Sampling means generating a specific object from that distribution according to its assigned probabilities. In the case of $p_\text{Cat}$, sampling would most often produce an image of a cat because it has a high probability, while images of dogs or humans would only appear very rarely, if ever.
 
 ???note "Illustrative Example - Dice"
     Imagine rolling a fair die. The result would be a number 1-6, all with equal chance. The probability distribution of the dice roll $p_\text{dice}$ could thus be described as the following table:
@@ -40,15 +38,15 @@ The goal of generative modeling can now be formalized as to allow us to sample f
 
 Great! So, just train a neural network to learn $p_\text{data},$ right? Well... it's not so easy.
 
-First, the how. The modern approach to do this, is to train a model to take in **Gaussian noise** and output a realistic image. Since the Gaussian is very simple and we know how to generate infinite samples of it, this means we can generate infinite samples of realistic images if we trained such a model. Neat!
+First, the how. The modern solution is to train a model to take in **Gaussian noise** and output a realistic image. Since the Gaussian is very simple and easy to make in infinite supply, an endless stream of realistic images can be created by feeding the noise into said model. Neat!
 
-Second, the challenges. Specifically, it's extremely difficult to ensure that the neural network outputs actual probabilities, and not just some meaningless numbers. For example, we need to make sure all possible outputs are positive - negative probability doesn't make sense, right? (This is the easy restriction to understand and satisfy, there's another which is the true problem)
+Second, the challenge: It's extremely difficult to ensure that the neural network outputs actual probabilities, and not some meaningless numbers. 
 
-Diffusion models sidestep this issue by not trying to model $p_\text{data}$ directly, but an intermediate quantity which allows us to recover $p_\text{data}$ at a reasonable accuracy once learned.
+Diffusion models sidestep this issue by not trying to model $p_\text{data}$ directly, but an intermediate quantity which can be used to recover $p_\text{data}$ at a reasonable accuracy once learned.
 
 ## What is a Loss Function?
 
-At a high level, we always say we "train a model to learn something." Well... how do we quantify how much the model has "learned"?
+At a high level, people always say they "train a model to learn something." Well... how does one quantify how much the model has "learned"?
 
 The **loss (function) $L$**, also called the **cost** or **objective**, is a function people design to measure how well the model performs on a task. Conventionally, a lower loss means the model is performing better. Training a model could also be referred to as minimizing the loss.
 
@@ -84,13 +82,13 @@ Several training rules, different types of losses, regularization techniques... 
 
 ### $p_\text{data}$ Model Specification
 
-Specifically, a generative model is trained to take a data point from an initial probability distribution $p_\text{init},$ and output a data point from a target probability distribution $p_\text{data}.$
+A generative model is trained to take a data point from an initial probability distribution $p_\text{init},$ and output a data point from a target probability distribution $p_\text{data}.$
 
 In sections above, the Gaussian was $p_\text{init},$ while the distrubtion underlying realistic images was $p_\text{data}.$ However, the entire framework is more general: it is theoretically possible to e.g. train a model that takes cats from $p_\text{Cat}$ and transform them into dogs from $p_\text{Dog}.$
 
-Diffusion models learn a transformation that would warp the entire $p_\text{init}$ into the shape of $p_\text{data}$ as you step through time $t.$ Specifically, they learn **velocity fields**: given a mid-transform $p_t,$ diffusion models learn in *which directions* and by *how much* $p_t$ should change in order to get closer to $p_\text{data}.$
+Diffusion models learn a transformation that would warp the entire $p_\text{init}$ into the shape of $p_\text{data}$ as it steps through time $t.$ Specifically, they learn **velocity fields**: given a mid-transform $p_t,$ diffusion models learn in *which directions* and by *how much* $p_t$ should change in order to get closer to $p_\text{data}.$ 
 
-Stepping through $t=0\to1$ and taking "snapshots" of what the current mid-transform distrubution $p_t$ looks like, we obtain a collection of $p_t$ that together trace a path - a **probability path** - which interpolates between $p_\text{init}=p_0$ and $p_\text{data}=p_1.$
+Stepping through $t=0\to1$ and taking "snapshots" of what the current mid-transform distrubution $p_t$ looks like creates a collection of $p_t$ that together trace a path - a **probability path** - which interpolates between $p_\text{init}=p_0$ and $p_\text{data}=p_1.$
 
 During training, practitioners would *pre-define* a probability path during training, such as $x_t = (1-t)x_0 + tx_1,$ where $x_0,x_t,x_1$ are samples from $p_0,p_t,p_1$ respectively. This means that during training, practitioners don't need to actually simulate the process, which would be very costly, and can calculate $x_t$ directly.
 
@@ -106,13 +104,13 @@ During training, practitioners would *pre-define* a probability path during trai
 Since the model should output probabilities, there are some contraints that it should follow:
 
 1. **Outputs should be positive.** Negative probability doesn't make sense.
-1. **All possible outputs should sum to 1.** This is because the output should represent chances that a specific outcome occurs; However, the chance that there be one outcome (*any* outcome, we don't care what it is) should be 100%, or 1.
+1. **All possible outputs should sum to 1.** This is because the output should represent chances that a specific outcome occurs; However, the chance that there be one outcome (*any* outcome, don't care what it is) should be 100%, or 1.
 
 1\. is not hard. For example, one can simply do $e^{-\text{output}},$ where $\text{output}$ is the raw neural network output, to transform it into all strictly positive values.
 
 2\. is the main issue. One natural idea is to first find what these outputs sum to, $Z,$ then just divide the model output value by $Z.$ Combining with the above, that results in $\frac{e^{-\text{output}}}{Z}.$ 
 
-However, as there are infinitely many possible inputs to the model, there are infinitely many possible outputs, making this impossible, as you can't just sum over infinitely many arbitrary numbers in a finite amount of time.
+However, as there are infinitely many possible inputs to the model, there are infinitely many possible outputs. It's impossible to sum over infinitely many arbitrary numbers in a finite amount of time.
 
 Here, $Z$ is called the **normalizing constant,** as in it is the number that would normalize the sum of outputs to 1 when divided.
 
@@ -121,5 +119,3 @@ People have come up with ways around this of course. Approaches prior to diffusi
 1. **Approximate $Z$:** This is *still* very hard and expensive to calculate.
 2. **Restrict the Architecture:** This limits the freedom in designing the neural network. Examples include autoregressive models.
 3. **Model the Generation Process Only:** Skip trying to model $p_\text{data}$ accurately, just model a process that can generate new data. This usually involves using adversarial loss, which is highly unstable and hard to train with, plus [the result might deviate from $p_\text{data}$](https://arxiv.org/abs/1706.08224). Examples include GANs.
-
-Diffusion models sidestep this issue by instead learning the "slope" / **gradient** of $p_\text{data}.$ This allows diffusion models to throw $Z$ completely out of the equation (reference Song's blog on how exactly), while still accurately learning $p_\text{data},$ which can be recovered by integration at inference - and what do you know, that's what samplers do!

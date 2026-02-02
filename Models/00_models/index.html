@@ -1,0 +1,1719 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../../Guidance/CFG/cfgpp/">
+      
+      
+        <link rel="next" href="../01_diffusion/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Introduction To Generative Models - 11yu on Tech For AI Image Generation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
+    
+      <link rel="stylesheet" href="../../style.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction-to-generative-models" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="11yu on Tech For AI Image Generation" class="md-header__button md-logo" aria-label="11yu on Tech For AI Image Generation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            11yu on Tech For AI Image Generation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Introduction To Generative Models
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="11yu on Tech For AI Image Generation" class="md-nav__button md-logo" aria-label="11yu on Tech For AI Image Generation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    11yu on Tech For AI Image Generation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ComfyUI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ComfyUI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ComfyUI/00_comfyui_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploring Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ComfyUI/data_types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ComfyUI/model_patches/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Patches
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guidance
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guidance
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Guidance/00_guidance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What is Guidance?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Guidance/01_cg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Classifier Guidance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CFG
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CFG
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Guidance/CFG/00_cfg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What is CFG?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Guidance/CFG/cfgpp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CFG++
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Models
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction To Generative Models
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction To Generative Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-does-generating-mean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Does "Generating" Mean?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Does &#34;Generating&#34; Mean?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-modeling-p_textdata-is-a-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Modeling \(p_\text{data}\) is a Problem
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-a-loss-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is a Loss Function?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What is a Loss Function?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-adversarial-loss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is Adversarial Loss?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deep-dives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deep Dives
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deep Dives">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#p_textdata-model-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        \(p_\text{data}\) Model Specification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#p_textdata-model-challenges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        \(p_\text{data}\) Model Challenges
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_diffusion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diffusion Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_vae/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VAE (Variational AutoEncoder)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12_training_objectives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [DD] Training Diffusion Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../99_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Additional Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sampling
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Sampling
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Sampling/00_sampling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What is Sampling?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Sampling/01_accuracy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    "Accuracy / Control"
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Sampling/03_sample_speed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generation Speed and How to Go Faster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Sampling/04_types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Types of Sampling Methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Sampling/05_training_free_list/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (Non-exhaustive) List of Training-Free Samplers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Sampling/06_training_based_list/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (Non-exhaustive) List of Training-Based Sampling Methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Sampling/07_tldr_usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Practical TL;DR of Samplers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Schedule
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Schedule
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Schedule/00_schedule/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What is a Noise Schedule?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Schedule/01_schedule_list/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    (Non-exhaustive) List of Schedulers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendix
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Appendix/other_guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other Guides
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Appendix/references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    References
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Appendix/special_thanks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Special Thanks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-does-generating-mean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Does "Generating" Mean?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Does &#34;Generating&#34; Mean?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-modeling-p_textdata-is-a-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Modeling \(p_\text{data}\) is a Problem
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-a-loss-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is a Loss Function?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What is a Loss Function?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-adversarial-loss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is Adversarial Loss?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deep-dives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deep Dives
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deep Dives">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#p_textdata-model-specification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        \(p_\text{data}\) Model Specification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#p_textdata-model-challenges" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        \(p_\text{data}\) Model Challenges
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="introduction-to-generative-models">Introduction To Generative Models</h1>
+<p>A <strong>generative model</strong> learns to create new data similar to the training data. This is in contrast to a <strong>discriminative model</strong> which learns to look at a new data point and predict a label or number. For images, you can imagine that:</p>
+<ul>
+<li>generative model: learns to make new images</li>
+<li>discriminative model: learns to classify given images as cat or dog</li>
+</ul>
+<p>In modern day, generative models are usually deep neural networks, including GANs, VAEs, Language Models, and of course diffusion models.</p>
+<h2 id="what-does-generating-mean">What Does "Generating" Mean?</h2>
+<p>"Generating" new data, like images, is formalized as <strong>sampling from a probability distribution <span class="arithmatex">\(p_\text{data}\)</span>.</strong> </p>
+<ul>
+<li>A probability distribution assigns probabilities to a set of specific objects. For example, a probability distribution for cat images <span class="arithmatex">\(p_\text{Cat}\)</span> would assign a high probability to cats, but a low probability to dogs, humans, plants, and everything else.</li>
+<li>Sampling means generating a specific object from that distribution according to its assigned probabilities. In the case of <span class="arithmatex">\(p_\text{Cat}\)</span>, sampling would most often produce an image of a cat because it has a high probability, while images of dogs or humans would only appear very rarely, if ever.</li>
+</ul>
+<details class="note">
+<summary>Illustrative Example - Dice</summary>
+<p>Imagine rolling a fair die. The result would be a number 1-6, all with equal chance. The probability distribution of the dice roll <span class="arithmatex">\(p_\text{dice}\)</span> could thus be described as the following table:</p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(\text{roll}\)</span></th>
+<th><span class="arithmatex">\(1\)</span></th>
+<th><span class="arithmatex">\(2\)</span></th>
+<th><span class="arithmatex">\(3\)</span></th>
+<th><span class="arithmatex">\(4\)</span></th>
+<th><span class="arithmatex">\(5\)</span></th>
+<th><span class="arithmatex">\(6\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(p_\text{dice}(\text{roll})\)</span></td>
+<td><span class="arithmatex">\(\frac16\)</span></td>
+<td><span class="arithmatex">\(\frac16\)</span></td>
+<td><span class="arithmatex">\(\frac16\)</span></td>
+<td><span class="arithmatex">\(\frac16\)</span></td>
+<td><span class="arithmatex">\(\frac16\)</span></td>
+<td><span class="arithmatex">\(\frac16\)</span></td>
+</tr>
+</tbody>
+</table>
+</details>
+<details class="note">
+<summary>Illustrative Example - Images</summary>
+<p>Imagine 2x2 images with 1 grayscale channel, where the channel value goes from 0-255. Each image can be thought of as a <span class="arithmatex">\(2\times2\times1\)</span> list of numbers. For example, this could be a black and white image where the top left pixel has brightness 100, bottom right 200, and the rest completely dark:</p>
+<p><span class="arithmatex">\(\begin{bmatrix}[100] &amp; [0] \\ [0] &amp; [200]\end{bmatrix}\)</span></p>
+<p>Assigning each image with a probability creates a probability distribution for these grayscale images:</p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(\text{Image}\)</span></th>
+<th><span class="arithmatex">\(\begin{bmatrix}[100] &amp; [0] \\ [0] &amp; [200]\end{bmatrix}\)</span></th>
+<th><span class="arithmatex">\(\begin{bmatrix}[42] &amp; [0] \\ [0] &amp; [42]\end{bmatrix}\)</span></th>
+<th>...</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(p_\text{data}(\text{Image})\)</span></td>
+<td><span class="arithmatex">\(\frac1{1234}\)</span></td>
+<td><span class="arithmatex">\(\frac{11}{1337}\)</span></td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
+<p>Real world images are obviously more complex, having dynamic widths <span class="arithmatex">\(W\)</span> and heights <span class="arithmatex">\(H\)</span>, with multiple color channels like RGB. This results in <span class="arithmatex">\(W\times H\times 3\)</span> list of numbers. However, the principles stay fundamentally the same. </p>
+</details>
+<h3 id="why-modeling-p_textdata-is-a-problem">Why Modeling <span class="arithmatex">\(p_\text{data}\)</span> is a Problem</h3>
+<p>Great! So, just train a neural network to learn <span class="arithmatex">\(p_\text{data},\)</span> right? Well... it's not so easy.</p>
+<p>First, the how. The modern solution is to train a model to take in <strong>Gaussian noise</strong> and output a realistic image. Since the Gaussian is very simple and easy to make in infinite supply, an endless stream of realistic images can be created by feeding the noise into said model. Neat!</p>
+<p>Second, the challenge: It's extremely difficult to ensure that the neural network outputs actual probabilities, and not some meaningless numbers. </p>
+<p>Diffusion models sidestep this issue by not trying to model <span class="arithmatex">\(p_\text{data}\)</span> directly, but an intermediate quantity which can be used to recover <span class="arithmatex">\(p_\text{data}\)</span> at a reasonable accuracy once learned.</p>
+<h2 id="what-is-a-loss-function">What is a Loss Function?</h2>
+<p>At a high level, people always say they "train a model to learn something." Well... how does one quantify how much the model has "learned"?</p>
+<p>The <strong>loss (function) <span class="arithmatex">\(L\)</span></strong>, also called the <strong>cost</strong> or <strong>objective</strong>, is a function people design to measure how well the model performs on a task. Conventionally, a lower loss means the model is performing better. Training a model could also be referred to as minimizing the loss.</p>
+<details class="note">
+<summary>Illustrative Example - House Price Prediction</summary>
+<p>Let's say you're trying to predict house prices. A simple and common loss function for this task could be <span class="arithmatex">\(L=|\text{TruePrice} - \text{PredictedPrice}|^2\)</span>, the square of the difference between the true price and the predicted price. As you can imagine, trying to minimize the loss <span class="arithmatex">\(L\)</span> is the same as trying to reduce the difference between the true price and the prediction, or in other words make the prediction more accurate. </p>
+<details class="info">
+<summary>Why Minimize the Square?</summary>
+<p>You may ask, why minimize the difference squared and not just the difference? An intuitive explanation is this: If the difference between the true price and the predicted price is big, then the square will extrapolate it to be bigger. This means we punish the model way harder if it makes a wildly inaccurate prediction.</p>
+<p>There are more math-heavy reasons rooted in statistics, the details of which are out of the scope of this article. (For those interested in searchable keywords, minimizing the squared difference - the L2 loss - corresponds to maximizing the likelihood, under the assumption that the random errors are normally distributed.)</p>
+</details>
+</details>
+<h3 id="what-is-adversarial-loss">What is Adversarial Loss?</h3>
+<p><strong>Adversarial</strong> loss generally refers to when practitioners pit two neural networks against each other.</p>
+<p>For example, in image genereating GANs, two models are simutaneously trained at once - the generator <span class="arithmatex">\(G\)</span>, and the discriminator / adversary <span class="arithmatex">\(A\)</span>:</p>
+<ul>
+<li><span class="arithmatex">\(G\)</span> tries its best to create realistic images and fool <span class="arithmatex">\(A\)</span>.</li>
+<li><span class="arithmatex">\(A\)</span> tries its best to distinguish between real and generated images. </li>
+</ul>
+<p>This is a sound approach, and GANs have been SOTA in terms of generative modeling. It comes with its own problem though, most prominently that it's very hard to balance <span class="arithmatex">\(G\)</span> and <span class="arithmatex">\(A\)</span>. For example:</p>
+<ul>
+<li><span class="arithmatex">\(G\)</span> only learns how to exploit <span class="arithmatex">\(A\)</span>'s defects, creating "images" that trick <span class="arithmatex">\(A\)</span> but are completely unnatural.</li>
+<li><span class="arithmatex">\(G\)</span> only learns a few types of images that <span class="arithmatex">\(A\)</span> is less certain about, destroying output variety. (<strong>Mode Collapse</strong>)</li>
+<li><span class="arithmatex">\(A\)</span> is too good at discerning real vs. generated that makes it impossible for <span class="arithmatex">\(G\)</span> to learn from gradient descent.</li>
+<li><span class="arithmatex">\(G\)</span> and <span class="arithmatex">\(A\)</span> end up in an infinite XYZ cycle. <span class="arithmatex">\(G\)</span> learns to generate only X, so <span class="arithmatex">\(A\)</span> learns to classify that as generated; <span class="arithmatex">\(G\)</span> then learns to only generate Y, so <span class="arithmatex">\(A\)</span> classifies all Y as generated, repeat.</li>
+</ul>
+<p>Several training rules, different types of losses, regularization techniques... have been proposed <em>just</em> to attempt to solve this problem in GANs.</p>
+<hr />
+<h2 id="deep-dives">Deep Dives</h2>
+<h3 id="p_textdata-model-specification"><span class="arithmatex">\(p_\text{data}\)</span> Model Specification</h3>
+<p>A generative model is trained to take a data point from an initial probability distribution <span class="arithmatex">\(p_\text{init},\)</span> and output a data point from a target probability distribution <span class="arithmatex">\(p_\text{data}.\)</span></p>
+<p>In sections above, the Gaussian was <span class="arithmatex">\(p_\text{init},\)</span> while the distrubtion underlying realistic images was <span class="arithmatex">\(p_\text{data}.\)</span> However, the entire framework is more general: it is theoretically possible to e.g. train a model that takes cats from <span class="arithmatex">\(p_\text{Cat}\)</span> and transform them into dogs from <span class="arithmatex">\(p_\text{Dog}.\)</span></p>
+<p>Diffusion models learn a transformation that would warp the entire <span class="arithmatex">\(p_\text{init}\)</span> into the shape of <span class="arithmatex">\(p_\text{data}\)</span> as it steps through time <span class="arithmatex">\(t.\)</span> Specifically, they learn <strong>velocity fields</strong>: given a mid-transform <span class="arithmatex">\(p_t,\)</span> diffusion models learn in <em>which directions</em> and by <em>how much</em> <span class="arithmatex">\(p_t\)</span> should change in order to get closer to <span class="arithmatex">\(p_\text{data}.\)</span> </p>
+<p>Stepping through <span class="arithmatex">\(t=0\to1\)</span> and taking "snapshots" of what the current mid-transform distrubution <span class="arithmatex">\(p_t\)</span> looks like creates a collection of <span class="arithmatex">\(p_t\)</span> that together trace a path - a <strong>probability path</strong> - which interpolates between <span class="arithmatex">\(p_\text{init}=p_0\)</span> and <span class="arithmatex">\(p_\text{data}=p_1.\)</span></p>
+<p>During training, practitioners would <em>pre-define</em> a probability path during training, such as <span class="arithmatex">\(x_t = (1-t)x_0 + tx_1,\)</span> where <span class="arithmatex">\(x_0,x_t,x_1\)</span> are samples from <span class="arithmatex">\(p_0,p_t,p_1\)</span> respectively. This means that during training, practitioners don't need to actually simulate the process, which would be very costly, and can calculate <span class="arithmatex">\(x_t\)</span> directly.</p>
+<div class="admonition note">
+<p class="admonition-title">Differences in Notation</p>
+<p>Earlier works derived diffusion from another framework (Markov Chain Monte Carlo, MCMC), and you thus may see conflicting conventions.</p>
+<p>For example, some refer to the transformation <span class="arithmatex">\(p_\text{init}\to p_\text{data}\)</span> as the <strong>reverse process,</strong> preferring a <strong>time reversal</strong> convention where instead, this process steps <em>backwards</em> through <strong>discrete time:</strong> <span class="arithmatex">\(t=1000,999,998,...,0.\)</span></p>
+<p>Some conventions from then still linger to this day, such as data prediction being written as <span class="arithmatex">\(x_0\)</span>-prediction and not <span class="arithmatex">\(x_1\)</span>-prediction.</p>
+</div>
+<h3 id="p_textdata-model-challenges"><span class="arithmatex">\(p_\text{data}\)</span> Model Challenges</h3>
+<p>Since the model should output probabilities, there are some contraints that it should follow:</p>
+<ol>
+<li><strong>Outputs should be positive.</strong> Negative probability doesn't make sense.</li>
+<li><strong>All possible outputs should sum to 1.</strong> This is because the output should represent chances that a specific outcome occurs; However, the chance that there be one outcome (<em>any</em> outcome, don't care what it is) should be 100%, or 1.</li>
+</ol>
+<p>1. is not hard. For example, one can simply do <span class="arithmatex">\(e^{-\text{output}},\)</span> where <span class="arithmatex">\(\text{output}\)</span> is the raw neural network output, to transform it into all strictly positive values.</p>
+<p>2. is the main issue. One natural idea is to first find what these outputs sum to, <span class="arithmatex">\(Z,\)</span> then just divide the model output value by <span class="arithmatex">\(Z.\)</span> Combining with the above, that results in <span class="arithmatex">\(\frac{e^{-\text{output}}}{Z}.\)</span> </p>
+<p>However, as there are infinitely many possible inputs to the model, there are infinitely many possible outputs. It's impossible to sum over infinitely many arbitrary numbers in a finite amount of time.</p>
+<p>Here, <span class="arithmatex">\(Z\)</span> is called the <strong>normalizing constant,</strong> as in it is the number that would normalize the sum of outputs to 1 when divided.</p>
+<p>People have come up with ways around this of course. Approaches prior to diffusion can be split into 3 categories, each with their own downsides. Referencing <a href="https://www.youtube.com/watch?v=wMmqCMwuM2Q">this talk</a> / <a href="https://yang-song.net/blog/2021/score/">blog</a> by Yang Song, one of the pioneers of modern diffusion, these are:</p>
+<ol>
+<li><strong>Approximate <span class="arithmatex">\(Z\)</span>:</strong> This is <em>still</em> very hard and expensive to calculate.</li>
+<li><strong>Restrict the Architecture:</strong> This limits the freedom in designing the neural network. Examples include autoregressive models.</li>
+<li><strong>Model the Generation Process Only:</strong> Skip trying to model <span class="arithmatex">\(p_\text{data}\)</span> accurately, just model a process that can generate new data. This usually involves using adversarial loss, which is highly unstable and hard to train with, plus <a href="https://arxiv.org/abs/1706.08224">the result might deviate from <span class="arithmatex">\(p_\text{data}\)</span></a>. Examples include GANs.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/katex.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/katex.min.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>

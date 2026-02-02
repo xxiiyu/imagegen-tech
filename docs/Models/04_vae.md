@@ -48,7 +48,7 @@ However, as a standard AE is trained to map 1 data point to 1 latent point (and 
 
 1. **Discontinuity:** Points near each other in latent space may represent completely different images. This means:
     - One can't generate more cats by encoding a `cat`, varying the latent a little, then decoding it back.
-    - If a diffusion model uses this AE, even a little error in output can result in completely different outputs, making the diffusion model hard to train.
+    - If a diffusion model uses this AE, even a little error in output can result in completely different images, making the diffusion model hard to train.
 2. **Incompleteness:** The latent space contains many "gaps" which represent latent images that `Decode` has never seen, and thus never learned to reconstruct. Trying to `Decode` this latent will result in nonsensical images. This means:
     - One can't generate more images by randomly sampling a latent and then decoding it, because it's likely that a random latent lands in one of those pesky gaps.
     - Assume an AE trained on `cat` and `dog` images, but not images containing both. If a diffusion model uses this AE, it would be impossible to generate a hybrid image because the necessary latent representation likely falls into a gap.
@@ -64,10 +64,10 @@ Now, instead of producing a specific $z$, `Encode` makes a mean $\bm{\mu_z}$ and
 
 However, this robustness comes at a cost: blur. The VAE tends to smooth out fine details, resulting in lossy, fuzzy images. This also shows in reconstruction, where a VAE is worse at it than AEs, tending to make the reconstructed images blurrier.
 
-While a VAE isn't ideal for generative modeling by itself, combining it with diffusion models proved to be a great idea: 
+While a VAE isn't ideal for generative modeling by itself, combining it with diffusion models proves to be a great idea: 
 
 - The VAE handles the compression, learning an informative and computationally efficient latent space.
-- The diffusion model handles the generation, learning all the complex patterns that finally hone in on high-fidelity images.
+- The diffusion model handles the generation, learning all the complex patterns and finally hone in on high-fidelity images.
 
 ### Practical Details
 

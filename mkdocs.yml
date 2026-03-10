@@ -2,6 +2,7 @@ site_name: "11yu on Tech For AI Image Generation"
 
 theme:
   name: material
+  custom_dir: overrides
 
 plugins:
   - search

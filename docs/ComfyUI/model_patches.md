@@ -281,20 +281,18 @@ In essence, PAG does the following:
 - Make a *perturbed* model by removing its self-attention and replacing it with an identity matrix. Have it predict on the image.
 - Do the usual cfg sampling on the original image. Then, additionally, move away from the perturbed model prediction by `scale`.
 
-### [Mahiro is so cute that she deserves a better guidance function!! (。・ω・。)](https://huggingface.co/spaces/yoinked/blue-arxiv)
+### [Positive-Biased Guidance](https://huggingface.co/spaces/yoinked/blue-arxiv)
 
 | Aspect        | Content                                                |
 | ------------- | ------------------------------------------------------ |
 | Applicable To | All models                                             |
 | Purpose       | Quality enhancement (**Better alignment to positive**) |
 
-**Motivation:** normal cfg's negative prompt implicitly has the effect of making the model pay attention to the polar opposite of said negative.
+**Motivation:** Normal cfg's negative prompt implicitly has the effect of making the model pay attention to the polar opposite of said negative.
 
 **Fix:** When applicable, pay more attention to the positive and less to the negative.
 
 !!!note "Details"
-    Specifically:
-
     1. Calculate "positive leap," which is $\text{cfg}\times x_p.$ In the same vein, calculate "negative leap."
         - A "leap" semantically means "following positive/negative." cfg means "follow positive *as well as* move away from negative."
     1. Merge the positive leap and cfg, then calculate the similarity between that and the negative leap.
@@ -302,6 +300,8 @@ In essence, PAG does the following:
         - Low similarity: The leap was good, trust the leap more.
 
     (Find the quick read in the link, id `2024-1208.1`. Find a graph [here](https://www.desmos.com/calculator/wcztf0ktiq) comparing normal cfg and mahiro.)
+
+**Trivia:** Previously named "Mahiro is so cute that she deserves a better guidance function!! (。・ω・。)"
 
 ## Appendix
 ### Clarifying Rescale and Renorms

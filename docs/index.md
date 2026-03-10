@@ -1,6 +1,6 @@
 # Preamble
 
-Greetings. You may know me as `11yu` from various botmaking / imagegen discords.
+Greetings. You may know me as `xxiiyu` or `11yu` from other places.
 
 This guide is **mostly made with local generation in mind**, and is **not a good introduction to imagegen in general.** You can check out some [#other guides](./Appendix/other_guides.md) for that. Instead, I'll be focusing more on:
 

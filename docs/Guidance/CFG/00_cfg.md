@@ -77,7 +77,7 @@ Even for a well-trained model, while both $x_\text{uncond}$ and $x_\text{cond}$ 
 			"enableRightClick":false,
             "errorDialogsActive":true,
             "useBrowserForJS":false,
-			"filename":"/assets/cfg.ggb",
+			"filename":"../assets/cfg.ggb",
         };
         var applet = new GGBApplet(parameters, true);
         //  when used with Math Apps Bundle, uncomment this:

@@ -13,8 +13,8 @@ While not all of them were conceived this way, all diffusion samplers can be vie
 
 Given a noisy latent $x_t,$ the current timestep $t,$ and the step size $h_t$ decided by the [#noise schedule](../Schedule/00_schedule.md), one sampling step consists of the following:
 
-1. Ask the diffusion model to predict what the **completely clean image** looks like based on $x_t$ and $t$. Since this will be inaccurate, call this the **clean estimate $\hat x_t.$** (Update step)
-2. Based on $\hat x_t,$ update $x_t$ to a less noisy version of itself $x_{t+h_t}.$ (Renoising step)
+1. Ask the diffusion model to predict what the **completely clean image** looks like based on $x_t$ and $t$. Since this will be inaccurate, call this the **clean estimate $\hat x_t.$** (Denoising step)
+2. Based on $\hat x_t,$ update $x_t$ to a less noisy version of itself $x_{t+h_t}.$ (Update step)
     - The *sampler* is what decides how to update $x_t$ to $x_{t+h_t}$ based on $\hat x_t.$ The model just provides $\hat x_t.$
     - It's a "renoising step" from the viewpoint of $\hat x_t,$ which is untrustworthy, so noise gets re-added to become $x_{t+h_t}.$
 

@@ -9,7 +9,48 @@
 
 While not all of them were conceived this way, all diffusion samplers can be viewed as SDE/ODE solvers - or in other words, [numerical integration methods](https://en.wikipedia.org/wiki/Numerical_integration).
 
-## [Deep Dive] Sampling Algorithm
+## The Anatomy of One Sampling Step
+
+Given a noisy latent $x_t,$ the current timestep $t,$ and the step size $h_t$ decided by the [#noise schedule](../Schedule/00_schedule.md), one sampling step consists of the following:
+
+1. Ask the diffusion model to predict what the **completely clean image** looks like based on $x_t$ and $t$. Since this will be inaccurate, call this the **clean estimate $\hat x_t.$** (Update step)
+2. Based on $\hat x_t,$ update $x_t$ to a less noisy version of itself $x_{t+h_t}.$ (Renoising step)
+    - The *sampler* is what decides how to update $x_t$ to $x_{t+h_t}$ based on $\hat x_t.$ The model just provides $\hat x_t.$
+    - It's a "renoising step" from the viewpoint of $\hat x_t,$ which is untrustworthy, so noise gets re-added to become $x_{t+h_t}.$
+
+The above procedure is repeated for each sampling step until time reaches $t=1$ where $x_1$ should be a nice image. The following is an interactive demonstration:
+
+<div>
+    <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script>
+    <script type="text/javascript">
+        function perspective(p){
+            ggbApplet.setPerspective(p);
+        }
+        var parameters = {
+            "id":"ggbApplet",
+            "appName":"geometry",
+            "width":650,
+            "height":400,
+			"showToolBar":false,
+			"enableLabelDrags":false,
+			"enableShiftDragZoom":false,
+			"enableRightClick":false,
+            "errorDialogsActive":true,
+            "useBrowserForJS":false,
+			"filename":"../assets/uncond_sampling.ggb",
+        };
+        var applet = new GGBApplet(parameters, true);
+        //  when used with Math Apps Bundle, uncomment this:
+        //  applet.setHTML5Codebase('GeoGebra/HTML5/5.0/web3d/');
+        window.onload = function() { applet.inject('applet_container'); }
+    </script>
+    <div id="applet_container"></div>
+</div>
+
+???note "On Different Formulations"
+    There are other ways to describe how a sampling step should go; However, all of them are mathematically equivalent to each other. I picked the Karras Denoiser formulation, which is the one most widely implemented.  
+
+## [DD] Details of Specific Sampling Algorithms
 
 Using the Euler method, one can sample from a diffusion model as follows:
 
@@ -29,7 +70,7 @@ Where $\mathcal N(0,1)$ is the Standard Gaussian distribution.
 
 A few notes:
 
-- We recover flow matching / ODE sampling by setting $\eta_t=0.$
+- Flow matching / ODE sampling is done by setting $\eta_t=0.$
 - One can adapt the above algorithm to other samplers by changing line 5 to using said samplers' update rules rather than Euler's.
 
 To adapt the above into `k-diffusion`, and by extension popular UIs like forge and comfy, a few terminologies need to shift, as it mostly follows Karras's convention. Mainly:

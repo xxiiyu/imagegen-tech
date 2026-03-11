@@ -62,12 +62,14 @@ Now, instead of producing a specific $z$, `Encode` makes a mean $\bm{\mu_z}$ and
 1. **Continuity:** As `Decode` now receives a range of inputs around $\bm{\mu_z}$ that should all decode back into the original, it learns to map entire neighborhoods of the latent space to similar images.  
 2. **Completeness:** During training, a regularization term (KL Divergence) is introduced to "pull" the latent Gaussians to cluster near the origin. This creates a densely packed region without gaps, where any randomly sampled latent is guaranteed to decode into a valid image.
 
-However, this robustness comes at a cost: blur. The VAE tends to smooth out fine details, resulting in lossy, fuzzy images. This also shows in reconstruction, where a VAE is worse at it than AEs, tending to make the reconstructed images blurrier.
-
 While a VAE isn't ideal for generative modeling by itself, combining it with diffusion models proves to be a great idea: 
 
 - The VAE handles the compression, learning an informative and computationally efficient latent space.
 - The diffusion model handles the generation, learning all the complex patterns and finally hone in on high-fidelity images.
+
+!!!info "VAEs are not Inherently Blurry"
+    *Over-regularization,* such as training with $MSE$ loss instead of $\log MSE$ loss, makes VAEs blurry. Find more [here](https://arxiv.org/pdf/2006.10273#page=12).  
+    However, over-regularization may actually be desirable for generative purposes, since the point isn't reconstruction but learning a well-behaved, informative latent space.
 
 ### Practical Details
 

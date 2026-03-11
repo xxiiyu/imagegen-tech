@@ -59,13 +59,13 @@ Though sometimes they come along with a dedicated sampler like `lcm`, they may w
 
 ## Exponential Integrators
 
-**Exponential Integrators (EI),** sometimes called **Exponential Time Differencing (ETD)** among its many other names, became active research at least 10-20 years before diffusion models were developed. It breaks DEs down into a stiff "linear part," and the less-stiff "non-linear part":
+**Exponential Integrators (EI),** sometimes called **Exponential Time Differencing (ETD)** among its many other names, became active research at least 10-20 years before diffusion models were developed. It targets specific kinds of DEs which can be broken down into a stiff linear part, and the non-stiff non-linear part:
 
 $$
-\frac{du}{dt} = \underbrace{Au}_{\text{Linear(very stiff)}} + \underbrace{f(u, t)}_{\text{Non-linear}}
+\frac{du}{dt} = \underbrace{Au}_{\text{Linear,Stiff}} + \underbrace{f(u, t)}_{\text{Non-linear,Non-stiff}}
 $$
 
-The stiff linear part can then be solved exactly, leaving only the non-linear part to the sampler/solver. Compared to traditional methods, exponential integrators eliminate all errors associated with approximating the stiff linear part, making them great for stiff diffusion DEs.
+The stiff linear part can be solved exactly, leaving only the non-linear part to the sampler/solver. Compared to traditional methods, exponential integrators eliminate all errors associated with approximating the stiff linear part. Since diffusion fall under this type of DE, this makes EI great samplers.
 
 `deis`, `dpm(pp)`, `unipc`, `res` (and probably more) all use this technique.
 

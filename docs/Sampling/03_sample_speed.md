@@ -17,7 +17,7 @@ Increasing the image resolution means the model has to ingest and output more in
 
 In each step of generating an image, the model has to predict how to change the current intermediate output to move it closer to an image described by the positive prompt.
 
-- Enabling negative prompts by setting [#cfg](../Guidance/01_cfg.md) to anything but 1 doubles the amount of work and thus halves the speed. The model now additionally needs to predict on the negative prompt (to move away from it).
+- Enabling negative prompts by setting [#cfg](../Guidance/CFG/00_cfg.md) to anything but 1 doubles the amount of work and thus halves the speed. The model now additionally needs to predict on the negative prompt (to move away from it).
 - [Perp-Neg](https://perp-neg.github.io/) makes negative prompts very strong, but the model now also needs to predict on the empty prompt. This means 1.5x slower than cfg-not-1 and negative prompts are in play, or 3x slower than if cfg is 1.
 
 ## Some Things NOT Affecting Sampling Speed

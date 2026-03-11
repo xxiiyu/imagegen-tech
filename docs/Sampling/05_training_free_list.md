@@ -55,7 +55,7 @@ These 3, along with the classical ODE solvers `euler`, `heun`, and `LMS`, were t
 
 [DEIS](https://arxiv.org/abs/2204.13902) and [DPM](https://arxiv.org/abs/2206.00927) independently came to the same conclusion: Diffusion equations are too stiff for classical high-order solvers to do well. They use a variety of techniques to remedy this.
 
-Notably, they both solve a part of the equation exactly, removing any error associated with it while leaving the rest less stiff. This idea is  called [#exponential integrators](#exponential-integrators-exact-solutions-to-linear-terms), and it's so good that many samplers down the road also do it.
+Notably, they both solve a part of the equation exactly, removing any error associated with it while leaving the rest less stiff. This idea is  called [#exponential integrators](./04_types.md#exponential-integrators), and it's so good that many samplers down the road also do it.
 
 The DEIS paper also introduced "improved PNDM" (iPNDM). `ipndm_v` is the variable step version that should work better for diffusion, though [they find empirically](https://github.com/comfyanonymous/ComfyUI/discussions/3799) that `ipndm` performs better than `ipndm_v`.
 

@@ -8,7 +8,7 @@ One usually accesses these by choosing predefined samplers, i.e. in ComfyUI `eul
     - CFG++ samplers give eps-pred models a very good color range, rivaling that of what v-pred models claim to achieve. 
     - Using CFG++ to inpaint at high steps breaks the image for reasons unknown.
 
-!!!info "CFG++ For Flow Matching"
+!!!info "CFG++ for Flow Matching"
     Most CFG++ implementations right now assume a VE/VP schedule, and lack a scaling parameter $\alpha_t = 1-\sigma_t$ required for flow matching models, making them break. Exceptions I know of include comfyui's `euler_(ancestral_)cfg_pp`
 
 <!--

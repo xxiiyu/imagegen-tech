@@ -1,13 +1,13 @@
 # Diffusion Models
 
 !!!note "Sources"
-    This guide mostly references [MIT](https://diffusion.csail.mit.edu/docs/lecture-notes.pdf)'s lecture notes, and thus might differ from how other literature formuate things.
+    This guide mostly references [MIT](https://diffusion.csail.mit.edu/2026/docs/lecture_notes.pdf)'s lecture notes, and thus might differ from how other literature formuate things.
 
     For example, since flow could be thought of as a special case for diffusion, I'll be referring to both as "diffusion" here.
 
 ## Motivation for Diffusion
 
-Recall from [#the issue in modeling $p_\text{data}$](./00_models.md#why-modeling--is-a-problem) that directly modeling $p_\text{data}$ proves problematic.
+Recall from [#the issue in modeling $p_\text{data}$](./00_models.md#why-modeling-p_textdata-is-a-problem) that directly modeling $p_\text{data}$ proves problematic.
 
 Diffusion models instead tries to learn how to *nudge* Gaussian noise $p_\text{init}$ and gradually transform it into $p_\text{data}.$ 
 

@@ -69,7 +69,7 @@ Even for a well-trained model, while both $x_\text{uncond}$ and $x_\text{cond}$ 
         var parameters = {
             "id":"ggbApplet",
             "appName":"geometry",
-            "width":600,
+            "width":650,
             "height":400,
 			"showToolBar":false,
 			"enableLabelDrags":false,
@@ -94,7 +94,7 @@ Even for $0\leq\omega\leq1$ though, if the manifold just so happens to be suffic
 
 CFG is therefore not well-grounded in theory; its use is mainly justified by the massive leap in performance it offers in practice.
 
-!!!info "Why *Do* We Need CFG?"
+!!!info "Why *do* We Need CFG?"
 	If using CFG at all distorts the result into a fake distribution, why do all modern models still need CFG to generate high fidelity images?  
 	While the [original idea](https://arxiv.org/abs/2207.12598) came out in 2022, it's not until 2024 did people begin investigating CFG's inner workings under simplified assumptions, coming up with many intriging results.  
 	A [more recent](https://arxiv.org/abs/2505.19210) work finds that current models don't capture class-specific features as well as we'd like, leading to melded blobs at low guidance scales. It argues based on this that maybe the current training regimes still have massive room for improvements.

@@ -40,7 +40,7 @@ Great! So, just train a neural network to learn $p_\text{data},$ right? Well... 
 
 First, the how. The modern solution is to train a model to take in **Gaussian noise** and output a realistic image. Since the Gaussian is very simple and easy to make in infinite supply, an endless stream of realistic images can be created by feeding the noise into said model. Neat!
 
-Second, the challenge: It's extremely difficult to ensure that the neural network outputs actual probabilities, and not some meaningless numbers. 
+Second, the challenge: It's extremely difficult to ensure that the neural network outputs actual probabilities, and not some meaningless numbers. For details, see the [#Deep Dive](#p_textdata-model-challenges).
 
 Diffusion models sidestep this issue by not trying to model $p_\text{data}$ directly, but an intermediate quantity which can be used to recover $p_\text{data}$ at a reasonable accuracy once learned.
 

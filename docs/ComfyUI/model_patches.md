@@ -25,7 +25,7 @@ At the beginning of each section you can find a summary table, formatted like be
     Not required per se, but using this follows the theory and probably improves the quality.
     - **`x_0`:** Predict the data (clean image). Also called $x_0$ prediction.
     - **`img_to_img`:** I'd guess for [Lotus](https://arxiv.org/abs/2409.18124) based on when this was added and the commit message adding it.
-- **`zsnr: true`:** Force a **Z**ero-Terminal **S**ignal-to-**N**oise **R**atio schedule. See [#current schedules are bad](../Models/02_training_objectives.md#current-schedules-are-bad) for why this is important. Intended for `v_prediction`.
+- **`zsnr: true`:** Force a **Z**ero-Terminal **S**ignal-to-**N**oise **R**atio schedule. See [#current schedules are bad](../Models/12_training_objectives.md#current-schedules-are-flawed) for why this is important. Intended for `v_prediction`.
 
 !!!note "Details"
     **`sampling: eps, x0, v_prediction`** are mathematically connected through these formulae:

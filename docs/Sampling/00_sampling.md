@@ -37,7 +37,7 @@ The above procedure is repeated for each sampling step until time reaches $t=1$ 
 			"enableRightClick":false,
             "errorDialogsActive":true,
             "useBrowserForJS":false,
-			"filename":"../assets/uncond_sampling.ggb",
+			"filename":"../assets/sample.ggb",
         };
         var applet = new GGBApplet(parameters, true);
         //  when used with Math Apps Bundle, uncomment this:

@@ -1,0 +1,22 @@
+# Preamble
+
+Greetings. You may know me as `xxiiyu` or `11yu` from other places.
+
+This guide is **mostly made with local generation in mind**, and is **not a good beginner introduction**. Instead, I'll be focusing more on:
+
+- 1-2 steps further into the technical aspects of what a usual imagegen guide may provide.
+	- This is to compliment the multitude of other online guides that give a broader overview of the topic.
+	- You might find the gory, even more technical details in sections marked `[DD]`, or a separate `Deep Dive` section at the end of a page, if it exists.
+- lesser-known tips, tricks, and technologies that *may* improve your imagegen process.
+
+**Everything here should be taken with a mountain of salt,** as in practice, many other variables could influence your results greatly. Also, this article is mostly written by a dumb person (me). You will likely come out of a section thinking: "Interesting. This doesn't help me at all."
+
+With that in mind, let's dive in.
+
+<div class="grid cards" markdown>
+
+-	[Samplers](./Sampling/00_sampling.md)
+-	[Schedulers](./Schedule/00_schedule.md)
+-	[Guidance](./Guidance/00_guidance.md)
+
+</div>
